@@ -8,10 +8,7 @@
 </ion-header>
 
 <ion-content class="cadastro-content" [fullscreen]="true">
-
   <div class="form-container">
-
-    <!-- Solicitante (obrigatório) -->
     <div class="form-group">
       <label class="form-label">Solicitante *</label>
       <div class="input-wrapper" [class.input-error]="temErro('solicitante')">
@@ -21,55 +18,43 @@
       @if (temErro('solicitante')) { <span class="error-text">{{ erros['solicitante'] }}</span> }
     </div>
 
-    <!-- Setor -->
     <div class="form-group">
       <label class="form-label">Setor</label>
       <div class="input-wrapper select-wrapper">
-        <ion-select id="select-setor" placeholder="Selecione o setor"
-          [(ngModel)]="setor" interface="action-sheet" class="form-select">
-          @for (s of setores; track s) {
-            <ion-select-option [value]="s">{{ s }}</ion-select-option>
-          }
+        <ion-select id="select-setor" placeholder="Selecione o setor" [(ngModel)]="setor" interface="action-sheet" class="form-select">
+          @for (s of setores; track s) { <ion-select-option [value]="s">{{ s }}</ion-select-option> }
         </ion-select>
       </div>
     </div>
 
-    <!-- Título do Chamado (obrigatório) -->
     <div class="form-group">
       <label class="form-label">Título do Chamado *</label>
       <div class="input-wrapper" [class.input-error]="temErro('titulo')">
-        <ion-input id="input-titulo" type="text" placeholder="Ex: Computador não liga"
-          [(ngModel)]="titulo" maxlength="100" class="form-input"></ion-input>
+        <ion-input id="input-titulo" type="text" placeholder="Ex: Computador não liga" [(ngModel)]="titulo" maxlength="100" class="form-input"></ion-input>
       </div>
       @if (temErro('titulo')) { <span class="error-text">{{ erros['titulo'] }}</span> }
     </div>
 
-    <!-- Descrição do Problema (obrigatória) -->
     <div class="form-group">
       <label class="form-label">Descrição do Problema *</label>
       <div class="input-wrapper textarea-wrapper" [class.input-error]="temErro('descricao')">
-        <ion-textarea id="textarea-descricao" placeholder="Descreva o problema detalhadamente..."
-          [(ngModel)]="descricao" [rows]="4" [autoGrow]="true" maxlength="500" class="form-textarea"></ion-textarea>
+        <ion-textarea id="textarea-descricao" placeholder="Descreva o problema..." [(ngModel)]="descricao" [rows]="4" [autoGrow]="true" maxlength="500" class="form-textarea"></ion-textarea>
       </div>
       @if (temErro('descricao')) { <span class="error-text">{{ erros['descricao'] }}</span> }
     </div>
 
-    <!-- Prioridade (obrigatória) -->
     <div class="form-group">
       <label class="form-label">Prioridade *</label>
-      <div class="input-wrapper select-wrapper" [class.input-error]="temErro('prioridade')">
-        <ion-select id="select-prioridade" placeholder="Selecione a prioridade"
-          [(ngModel)]="prioridade" interface="action-sheet" class="form-select">
+      <div class="input-wrapper select-wrapper">
+        <ion-select id="select-prioridade" [(ngModel)]="prioridade" interface="action-sheet" class="form-select">
           <ion-select-option value="Baixa">🟢 Baixa</ion-select-option>
           <ion-select-option value="Média">🟡 Média</ion-select-option>
           <ion-select-option value="Alta">🟠 Alta</ion-select-option>
           <ion-select-option value="Urgente">🔴 Urgente</ion-select-option>
         </ion-select>
       </div>
-      @if (temErro('prioridade')) { <span class="error-text">{{ erros['prioridade'] }}</span> }
     </div>
 
-    <!-- Data de Abertura -->
     <div class="form-group">
       <label class="form-label">Data de Abertura</label>
       <div class="input-wrapper">
@@ -77,27 +62,22 @@
       </div>
     </div>
 
-    <!-- Técnico Responsável (obrigatório) -->
     <div class="form-group">
-      <label class="form-label">Técnico Responsável *</label>
-      <div class="input-wrapper select-wrapper" [class.input-error]="temErro('tecnico')">
-        <ion-select id="select-tecnico" placeholder="Selecione o técnico"
-          [(ngModel)]="tecnico" interface="action-sheet" class="form-select">
+      <label class="form-label">Técnico Responsável</label>
+      <div class="input-wrapper select-wrapper">
+        <ion-select id="select-tecnico" placeholder="Selecione o técnico" [(ngModel)]="tecnicoResponsavel" interface="action-sheet" class="form-select">
           @for (t of tecnicosAtivos; track t.id) {
             <ion-select-option [value]="t.nome">{{ t.nome }} — {{ t.especialidade }}</ion-select-option>
           }
         </ion-select>
       </div>
-      @if (temErro('tecnico')) { <span class="error-text">{{ erros['tecnico'] }}</span> }
     </div>
 
-    <!-- Status (visível apenas no modo edição) -->
     @if (modoEdicao) {
       <div class="form-group">
         <label class="form-label">Status</label>
         <div class="input-wrapper select-wrapper">
-          <ion-select id="select-status" placeholder="Selecione o status"
-            [(ngModel)]="status" interface="action-sheet" class="form-select">
+          <ion-select id="select-status" placeholder="Selecione o status" [(ngModel)]="status" interface="action-sheet" class="form-select">
             <ion-select-option value="Aberto">📋 Aberto</ion-select-option>
             <ion-select-option value="Em atendimento">⏳ Em atendimento</ion-select-option>
             <ion-select-option value="Concluído">✅ Concluído</ion-select-option>
@@ -107,21 +87,16 @@
       </div>
     }
 
-    <!-- Observação -->
     <div class="form-group">
       <label class="form-label">Observação</label>
       <div class="input-wrapper textarea-wrapper">
-        <ion-textarea id="textarea-observacao" placeholder="Observações adicionais..."
-          [(ngModel)]="observacao" [rows]="3" [autoGrow]="true" maxlength="500" class="form-textarea"></ion-textarea>
+        <ion-textarea id="textarea-observacao" placeholder="Observações..." [(ngModel)]="observacao" [rows]="3" [autoGrow]="true" maxlength="500" class="form-textarea"></ion-textarea>
       </div>
     </div>
 
-    <!-- Botão Salvar -->
     <ion-button id="btn-salvar" expand="block" shape="round" class="save-button" (click)="salvar()">
       <ion-icon [name]="modoEdicao ? 'checkmark-done-outline' : 'save-outline'" slot="start"></ion-icon>
       {{ modoEdicao ? 'Atualizar Chamado' : 'Cadastrar Chamado' }}
     </ion-button>
-
   </div>
-
 </ion-content>

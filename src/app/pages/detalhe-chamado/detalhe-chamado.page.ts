@@ -13,12 +13,7 @@ import {
   calendarOutline, constructOutline, documentTextOutline
 } from 'ionicons/icons';
 import { ChamadoService } from '../../services/chamado.service';
-import { AuthService } from '../../services/auth.service';
 
-/**
- * Tela de Detalhes do Chamado.
- * Controla visualização de botões de acordo com o perfil.
- */
 @Component({
   selector: 'app-detalhe-chamado',
   templateUrl: './detalhe-chamado.page.html',
@@ -29,13 +24,10 @@ import { AuthService } from '../../services/auth.service';
   ]
 })
 export class DetalheChamadoPage implements OnInit {
-
   chamado: any;
-  perfilUsuario: string = '';
 
   constructor(
     private chamadoService: ChamadoService,
-    private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
     private alertController: AlertController
@@ -49,15 +41,9 @@ export class DetalheChamadoPage implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.authService.estaLogado()) {
-      this.router.navigate(['/login']);
-      return;
-    }
-    this.perfilUsuario = this.authService.getPerfilUsuario();
-
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.chamado = this.chamadoService.buscarChamadoPorId(Number(id));
+      this.chamado = this.chamadoService.buscarPorId(Number(id));
     }
     if (!this.chamado) {
       this.router.navigate(['/lista-chamados']);
@@ -67,7 +53,7 @@ export class DetalheChamadoPage implements OnInit {
   ionViewWillEnter(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.chamado = this.chamadoService.buscarChamadoPorId(Number(id));
+      this.chamado = this.chamadoService.buscarPorId(Number(id));
     }
   }
 
@@ -94,7 +80,7 @@ export class DetalheChamadoPage implements OnInit {
           text: 'Excluir',
           role: 'destructive',
           handler: () => {
-            this.chamadoService.excluirChamado(this.chamado.id);
+            this.chamadoService.excluir(this.chamado.id);
             this.router.navigate(['/lista-chamados']);
           }
         }

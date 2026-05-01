@@ -11,11 +11,6 @@ import { addIcons } from 'ionicons';
 import { checkmarkDoneOutline } from 'ionicons/icons';
 import { ChamadoService } from '../../services/chamado.service';
 
-/**
- * Tela de Atualização de Status.
- * Permite alterar o status do chamado e registrar observação do atendimento.
- * Utiliza o método atualizarStatus() do service.
- */
 @Component({
   selector: 'app-atualizar-status',
   templateUrl: './atualizar-status.page.html',
@@ -27,16 +22,10 @@ import { ChamadoService } from '../../services/chamado.service';
   ]
 })
 export class AtualizarStatusPage implements OnInit {
-
-  // Dados do chamado
   chamadoId: number = 0;
   chamadoTitulo: string = '';
-
-  // Campos do formulário vinculados com ngModel
-  novoStatus: string = '';
+  novoStatus: any = '';
   observacao: string = '';
-
-  // Controle de erros
   erros: { [campo: string]: string } = {};
 
   constructor(
@@ -51,7 +40,7 @@ export class AtualizarStatusPage implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      const chamado = this.chamadoService.buscarChamadoPorId(Number(id));
+      const chamado = this.chamadoService.buscarPorId(Number(id));
       if (chamado) {
         this.chamadoId = chamado.id;
         this.chamadoTitulo = chamado.titulo;
@@ -63,30 +52,18 @@ export class AtualizarStatusPage implements OnInit {
     }
   }
 
-  /**
-   * Salva a atualização de status usando atualizarStatus() do service.
-   */
   async salvar(): Promise<void> {
     this.erros = {};
-
     if (!this.novoStatus) {
       this.erros['status'] = 'Selecione o novo status.';
       return;
     }
-
-    // Utiliza o método atualizarStatus do service conforme especificação
-    this.chamadoService.atualizarStatus(
-      this.chamadoId,
-      this.novoStatus,
-      this.observacao.trim()
-    );
-
+    this.chamadoService.atualizarStatus(this.chamadoId, this.novoStatus, this.observacao.trim());
     const toast = await this.toastController.create({
       message: 'Status atualizado com sucesso!',
       duration: 2500, position: 'bottom', color: 'success', cssClass: 'custom-toast'
     });
     await toast.present();
-
     this.router.navigate(['/detalhe-chamado', this.chamadoId]);
   }
 

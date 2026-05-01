@@ -8,26 +8,19 @@
 </ion-header>
 
 <ion-content class="detalhe-content" [fullscreen]="true">
-
   @if (chamado) {
     <div class="detalhe-container">
-
-      <!-- Cabeçalho com status e prioridade -->
       <div class="detalhe-header">
         <div class="status-badge status-{{ chamado.status === 'Em atendimento' ? 'andamento' : chamado.status.toLowerCase() }}">
           <ion-icon [name]="getIconeStatus(chamado.status)"></ion-icon>
           <span>{{ chamado.status }}</span>
         </div>
-        <ion-badge class="priority-pill priority-{{ chamado.prioridade.toLowerCase() }}">
-          {{ chamado.prioridade }}
-        </ion-badge>
+        <ion-badge class="priority-pill priority-{{ chamado.prioridade.toLowerCase() }}">{{ chamado.prioridade }}</ion-badge>
       </div>
 
-      <!-- Título -->
       <h1 class="detalhe-titulo">{{ chamado.titulo }}</h1>
       <p class="detalhe-id">#{{ chamado.id }}</p>
 
-      <!-- Cards de informação -->
       <div class="info-card">
         <div class="info-row">
           <ion-icon name="person-outline" class="info-icon"></ion-icon>
@@ -53,7 +46,7 @@
           <ion-icon name="construct-outline" class="info-icon"></ion-icon>
           <div>
             <span class="info-label">Técnico Responsável</span>
-            <span class="info-value">{{ chamado.tecnico }}</span>
+            <span class="info-value">{{ chamado.tecnicoResponsavel }}</span>
           </div>
         </div>
       </div>
@@ -85,27 +78,20 @@
         </div>
       }
 
-      <!-- Botões de ação -->
       <div class="actions">
-        @if (perfilUsuario === 'tecnico') {
-          <ion-button expand="block" shape="round" class="btn-status" (click)="atualizarStatus()">
-            <ion-icon name="refresh-outline" slot="start"></ion-icon>
-            Atualizar Status
-          </ion-button>
-        }
-        @if (perfilUsuario !== 'tecnico' && perfilUsuario !== 'usuario') {
-          <ion-button expand="block" shape="round" fill="outline" class="btn-editar" (click)="editarChamado()">
-            <ion-icon name="create-outline" slot="start"></ion-icon>
-            Editar Chamado
-          </ion-button>
-          <ion-button expand="block" shape="round" fill="outline" class="btn-excluir" (click)="excluirChamado()">
-            <ion-icon name="trash-outline" slot="start"></ion-icon>
-            Excluir Chamado
-          </ion-button>
-        }
+        <ion-button expand="block" shape="round" class="btn-status" (click)="atualizarStatus()">
+          <ion-icon name="refresh-outline" slot="start"></ion-icon>
+          Atualizar Status
+        </ion-button>
+        <ion-button expand="block" shape="round" fill="outline" class="btn-editar" (click)="editarChamado()">
+          <ion-icon name="create-outline" slot="start"></ion-icon>
+          Editar Chamado
+        </ion-button>
+        <ion-button expand="block" shape="round" fill="outline" class="btn-excluir" (click)="excluirChamado()">
+          <ion-icon name="trash-outline" slot="start"></ion-icon>
+          Excluir Chamado
+        </ion-button>
       </div>
-
     </div>
   }
-
 </ion-content>

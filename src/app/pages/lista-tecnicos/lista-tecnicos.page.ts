@@ -9,16 +9,10 @@ import {
   AlertController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import {
-  addOutline, trashOutline, createOutline,
-  personOutline, callOutline, chevronForwardOutline
-} from 'ionicons/icons';
-import { ChamadoService } from '../../services/chamado.service';
+import { addOutline, trashOutline, createOutline, personOutline, callOutline, chevronForwardOutline } from 'ionicons/icons';
+import { TecnicoService } from '../../services/tecnico.service';
+import { Tecnico } from '../../models/tecnico.model';
 
-/**
- * Tela de Lista de Técnicos.
- * Exibe os técnicos cadastrados usando listarTecnicos() do service unificado.
- */
 @Component({
   selector: 'app-lista-tecnicos',
   templateUrl: './lista-tecnicos.page.html',
@@ -32,26 +26,18 @@ import { ChamadoService } from '../../services/chamado.service';
   ]
 })
 export class ListaTecnicosPage {
-
-  // Lista de técnicos
-  tecnicos: any[] = [];
+  tecnicos: Tecnico[] = [];
 
   constructor(
-    private chamadoService: ChamadoService,
+    private tecnicoService: TecnicoService,
     private router: Router,
     private alertController: AlertController
   ) {
-    addIcons({
-      addOutline, trashOutline, createOutline,
-      personOutline, callOutline, chevronForwardOutline
-    });
+    addIcons({ addOutline, trashOutline, createOutline, personOutline, callOutline, chevronForwardOutline });
   }
 
-  /**
-   * Carrega a lista ao entrar na tela.
-   */
   ionViewWillEnter(): void {
-    this.tecnicos = this.chamadoService.listarTecnicos();
+    this.tecnicos = this.tecnicoService.listarTodos();
   }
 
   novoTecnico(): void {
@@ -62,9 +48,6 @@ export class ListaTecnicosPage {
     this.router.navigate(['/cadastro-tecnico', id]);
   }
 
-  /**
-   * Exclui técnico usando o método excluirTecnico() do service unificado.
-   */
   async excluirTecnico(id: number): Promise<void> {
     const alert = await this.alertController.create({
       header: 'Confirmar Exclusão',
@@ -73,11 +56,10 @@ export class ListaTecnicosPage {
       buttons: [
         { text: 'Cancelar', role: 'cancel' },
         {
-          text: 'Excluir',
-          role: 'destructive',
+          text: 'Excluir', role: 'destructive',
           handler: () => {
-            this.chamadoService.excluirTecnico(id);
-            this.tecnicos = this.chamadoService.listarTecnicos();
+            this.tecnicoService.excluir(id);
+            this.tecnicos = this.tecnicoService.listarTodos();
           }
         }
       ]

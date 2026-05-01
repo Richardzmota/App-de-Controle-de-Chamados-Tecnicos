@@ -12,10 +12,6 @@ import {
 } from 'ionicons/icons';
 import { ChamadoService } from '../../services/chamado.service';
 
-/**
- * Tela de Resumo dos Chamados.
- * Apresenta totais calculados com base no array de chamados do service unificado.
- */
 @Component({
   selector: 'app-resumo',
   templateUrl: './resumo.page.html',
@@ -27,8 +23,7 @@ import { ChamadoService } from '../../services/chamado.service';
   ]
 })
 export class ResumoPage {
-
-  stats = {
+  stats: any = {
     abertos: 0, emAtendimento: 0, concluidos: 0, cancelados: 0,
     total: 0, baixa: 0, media: 0, alta: 0, urgente: 0
   };
@@ -42,6 +37,6 @@ export class ResumoPage {
   }
 
   ionViewWillEnter(): void {
-    this.stats = this.chamadoService.obterResumo();
+    this.stats = this.chamadoService.obterEstatisticas();
   }
 }

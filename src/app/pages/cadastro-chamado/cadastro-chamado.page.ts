@@ -4,19 +4,14 @@ import { FormsModule } from '@angular/forms';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent,
   IonButton, IonIcon, IonButtons, IonBackButton,
-  IonInput, IonTextarea,
-  IonSelect, IonSelectOption,
+  IonInput, IonTextarea, IonSelect, IonSelectOption,
   ToastController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { saveOutline, checkmarkDoneOutline } from 'ionicons/icons';
 import { ChamadoService } from '../../services/chamado.service';
+import { TecnicoService } from '../../services/tecnico.service';
 
-/**
- * Tela de Cadastro de Chamado.
- * Formulário para registrar novo chamado técnico.
- * Campos: solicitante, setor, título, descrição, prioridade, data, técnico e status.
- */
 @Component({
   selector: 'app-cadastro-chamado',
   templateUrl: './cadastro-chamado.page.html',
@@ -24,42 +19,31 @@ import { ChamadoService } from '../../services/chamado.service';
   imports: [
     FormsModule, IonHeader, IonToolbar, IonTitle, IonContent,
     IonButton, IonIcon, IonButtons, IonBackButton,
-    IonInput, IonTextarea,
-    IonSelect, IonSelectOption
+    IonInput, IonTextarea, IonSelect, IonSelectOption
   ]
 })
 export class CadastroChamadoPage implements OnInit {
-
-  // Controla se é edição ou novo cadastro
   modoEdicao: boolean = false;
   tituloTela: string = 'Cadastro de Chamado';
 
-  // Campos do formulário vinculados com ngModel
   chamadoId: number = 0;
   solicitante: string = '';
   setor: string = '';
   titulo: string = '';
   descricao: string = '';
-  prioridade: string = 'Média';
+  prioridade: any = 'Média';
   dataAbertura: string = '';
-  tecnico: string = '';
-  status: string = 'Aberto';
+  tecnicoResponsavel: string = '';
+  status: any = 'Aberto';
   observacao: string = '';
 
-  // Controle de erros de validação
   erros: { [campo: string]: string } = {};
-
-  // Lista de setores disponíveis
-  setores: string[] = [
-    'TI', 'Financeiro', 'Comercial', 'Administrativo',
-    'RH', 'Recepção', 'Produção', 'Logística', 'Diretoria'
-  ];
-
-  // Lista de técnicos ativos (carregada do service)
+  setores: string[] = ['TI', 'Financeiro', 'Comercial', 'Administrativo', 'RH', 'Recepção', 'Produção', 'Logística', 'Diretoria'];
   tecnicosAtivos: any[] = [];
 
   constructor(
     private chamadoService: ChamadoService,
+    private tecnicoService: TecnicoService,
     private router: Router,
     private route: ActivatedRoute,
     private toastController: ToastController
@@ -67,18 +51,10 @@ export class CadastroChamadoPage implements OnInit {
     addIcons({ saveOutline, checkmarkDoneOutline });
   }
 
-  /**
-   * Inicializa o formulário. Define data de hoje e carrega técnicos ativos.
-   * Verifica se há ID na rota para modo de edição.
-   */
   ngOnInit(): void {
-    // Define a data de hoje como padrão
     this.dataAbertura = new Date().toISOString().split('T')[0];
+    this.tecnicosAtivos = this.tecnicoService.listarTodos().filter(t => t.situacao === 'Ativo');
 
-    // Carrega lista de técnicos ativos do service
-    this.tecnicosAtivos = this.chamadoService.listarTecnicosAtivos();
-
-    // Verifica se é modo edição
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.modoEdicao = true;
@@ -87,11 +63,8 @@ export class CadastroChamadoPage implements OnInit {
     }
   }
 
-  /**
-   * Carrega os dados de um chamado existente para edição.
-   */
   carregarChamado(id: number): void {
-    const chamado = this.chamadoService.buscarChamadoPorId(id);
+    const chamado = this.chamadoService.buscarPorId(id);
     if (chamado) {
       this.chamadoId = chamado.id;
       this.solicitante = chamado.solicitante;
@@ -100,102 +73,51 @@ export class CadastroChamadoPage implements OnInit {
       this.descricao = chamado.descricao;
       this.prioridade = chamado.prioridade;
       this.dataAbertura = chamado.dataAbertura;
-      this.tecnico = chamado.tecnico;
+      this.tecnicoResponsavel = chamado.tecnicoResponsavel;
       this.status = chamado.status;
       this.observacao = chamado.observacao;
-    } else {
-      this.mostrarToast('Chamado não encontrado.', 'warning');
-      this.router.navigate(['/lista-chamados']);
     }
   }
 
-  /**
-   * Validações obrigatórias:
-   * - Solicitante obrigatório
-   * - Título obrigatório
-   * - Descrição obrigatória
-   * - Prioridade obrigatória
-   * - Técnico obrigatório
-   */
   validarFormulario(): boolean {
     this.erros = {};
-
-    if (!this.solicitante.trim()) {
-      this.erros['solicitante'] = 'Solicitante obrigatório.';
-    }
-    if (!this.titulo.trim()) {
-      this.erros['titulo'] = 'Título obrigatório.';
-    }
-    if (!this.descricao.trim()) {
-      this.erros['descricao'] = 'Descrição obrigatória.';
-    }
-    if (!this.prioridade) {
-      this.erros['prioridade'] = 'Prioridade obrigatória.';
-    }
-    if (!this.tecnico) {
-      this.erros['tecnico'] = 'Técnico obrigatório.';
-    }
-
+    if (!this.solicitante.trim()) this.erros['solicitante'] = 'Obrigatório.';
+    if (!this.titulo.trim()) this.erros['titulo'] = 'Obrigatório.';
+    if (!this.descricao.trim()) this.erros['descricao'] = 'Obrigatório.';
     return Object.keys(this.erros).length === 0;
   }
 
-  /**
-   * Salva o chamado (novo ou atualização).
-   */
   async salvar(): Promise<void> {
-    if (!this.validarFormulario()) {
-      this.mostrarToast('Preencha todos os campos obrigatórios.', 'danger');
-      return;
-    }
+    if (!this.validarFormulario()) return;
 
     if (this.modoEdicao) {
-      // Atualiza chamado existente
-      this.chamadoService.atualizarChamado({
+      this.chamadoService.atualizar({
         id: this.chamadoId,
-        solicitante: this.solicitante.trim(),
+        solicitante: this.solicitante,
         setor: this.setor,
-        titulo: this.titulo.trim(),
-        descricao: this.descricao.trim(),
+        titulo: this.titulo,
+        descricao: this.descricao,
         prioridade: this.prioridade,
         dataAbertura: this.dataAbertura,
-        tecnico: this.tecnico,
+        tecnicoResponsavel: this.tecnicoResponsavel,
         status: this.status,
-        observacao: this.observacao.trim()
+        observacao: this.observacao
       });
-      this.mostrarToast('Chamado atualizado com sucesso!', 'success');
     } else {
-      // Adiciona novo chamado usando adicionarChamado do service
-      this.chamadoService.adicionarChamado({
-        solicitante: this.solicitante.trim(),
+      this.chamadoService.adicionar({
+        solicitante: this.solicitante,
         setor: this.setor,
-        titulo: this.titulo.trim(),
-        descricao: this.descricao.trim(),
+        titulo: this.titulo,
+        descricao: this.descricao,
         prioridade: this.prioridade,
         dataAbertura: this.dataAbertura,
-        tecnico: this.tecnico,
+        tecnicoResponsavel: this.tecnicoResponsavel,
         status: 'Aberto',
         observacao: ''
       });
-      this.mostrarToast('Chamado cadastrado com sucesso!', 'success');
     }
-
     this.router.navigate(['/lista-chamados']);
   }
 
-  /**
-   * Exibe um toast de notificação.
-   */
-  async mostrarToast(mensagem: string, cor: string): Promise<void> {
-    const toast = await this.toastController.create({
-      message: mensagem, duration: 2500, position: 'bottom', color: cor, cssClass: 'custom-toast'
-    });
-    await toast.present();
-  }
-
-  /**
-   * Verifica se um campo tem erro.
-   */
-  temErro(campo: string): boolean {
-    return !!this.erros[campo];
-  }
+  temErro(campo: string): boolean { return !!this.erros[campo]; }
 }
