@@ -8,67 +8,82 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
+
 <ion-content class="menu-content" [fullscreen]="true">
-  <div class="user-header">
-    <div class="user-avatar">
-      <ion-icon name="construct-outline"></ion-icon>
+  <div class="menu-container">
+
+    <!-- Saudação Animada -->
+    <div class="welcome-section">
+      <div class="welcome-avatar">
+        <ion-icon name="construct-outline"></ion-icon>
+      </div>
+      <h2>Bem-vindo(a),</h2>
+      <h1>Administrador</h1>
+      <div class="welcome-subtitle">PAINEL DE CONTROLE</div>
     </div>
-    <p class="welcome-text">Bem-vindo(a),</p>
-    <h2 class="user-name">Administrador</h2>
-    <p class="user-profile">PAINEL DE CONTROLE</p>
-  </div>
-  <div class="menu-grid-container">
-    <ion-grid>
-      <ion-row>
-        <ion-col size="6">
-          <div class="menu-card" (click)="cadastrarChamado()">
-            <div class="icon-wrapper bg-purple">
-              <ion-icon name="add-circle-outline"></ion-icon>
+
+    <!-- Grid de Navegação Interativa -->
+    <div class="nav-section">
+      <ion-grid>
+        <ion-row>
+
+          <ion-col size="6">
+            <div class="nav-card" (click)="cadastrarChamado()">
+              <div class="nav-icon-wrapper icon-purple">
+                <ion-icon name="add-circle-outline"></ion-icon>
+              </div>
+              <span class="nav-label">Cadastro de Chamado</span>
             </div>
-            <span class="card-label">Cadastro de Chamado</span>
-          </div>
-        </ion-col>
-        <ion-col size="6">
-          <div class="menu-card" (click)="listarChamados()">
-            <div class="icon-wrapper bg-green">
-              <ion-icon name="list-outline"></ion-icon>
+          </ion-col>
+
+          <ion-col size="6">
+            <div class="nav-card" (click)="listarChamados()">
+              <div class="nav-icon-wrapper icon-green">
+                <ion-icon name="list-outline"></ion-icon>
+              </div>
+              <span class="nav-label">Lista de Chamados</span>
             </div>
-            <span class="card-label">Lista de Chamados</span>
-          </div>
-        </ion-col>
-        <ion-col size="6">
-          <div class="menu-card" (click)="cadastrarTecnico()">
-            <div class="icon-wrapper bg-pink">
-              <ion-icon name="person-add-outline"></ion-icon>
+          </ion-col>
+
+          <ion-col size="6">
+            <div class="nav-card" (click)="cadastrarTecnico()">
+              <div class="nav-icon-wrapper icon-pink">
+                <ion-icon name="person-add-outline"></ion-icon>
+              </div>
+              <span class="nav-label">Cadastro de Técnico</span>
             </div>
-            <span class="card-label">Cadastro de Técnico</span>
-          </div>
-        </ion-col>
-        <ion-col size="6">
-          <div class="menu-card" (click)="listarTecnicos()">
-            <div class="icon-wrapper bg-light-purple">
-              <ion-icon name="people-outline"></ion-icon>
+          </ion-col>
+
+          <ion-col size="6">
+            <div class="nav-card" (click)="listarTecnicos()">
+              <div class="nav-icon-wrapper icon-teal">
+                <ion-icon name="people-outline"></ion-icon>
+              </div>
+              <span class="nav-label">Lista de Técnicos</span>
             </div>
-            <span class="card-label">Lista de Técnicos</span>
-          </div>
-        </ion-col>
-        <ion-col size="6">
-          <div class="menu-card" (click)="verResumo()">
-            <div class="icon-wrapper bg-blue">
-              <ion-icon name="stats-chart-outline"></ion-icon>
+          </ion-col>
+
+          <ion-col size="6">
+            <div class="nav-card" (click)="verResumo()">
+              <div class="nav-icon-wrapper icon-blue">
+                <ion-icon name="stats-chart-outline"></ion-icon>
+              </div>
+              <span class="nav-label">Resumo</span>
             </div>
-            <span class="card-label">Resumo</span>
-          </div>
-        </ion-col>
-        <ion-col size="6">
-          <div class="menu-card" (click)="verSobre()">
-            <div class="icon-wrapper bg-orange">
-              <ion-icon name="information-circle-outline"></ion-icon>
+          </ion-col>
+
+          <ion-col size="6">
+            <div class="nav-card" (click)="verSobre()">
+              <div class="nav-icon-wrapper icon-orange">
+                <ion-icon name="information-circle-outline"></ion-icon>
+              </div>
+              <span class="nav-label">Sobre</span>
             </div>
-            <span class="card-label">Sobre</span>
-          </div>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+          </ion-col>
+
+        </ion-row>
+      </ion-grid>
+    </div>
+
   </div>
 </ion-content>
