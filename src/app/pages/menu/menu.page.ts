@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UpperCasePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import {
   IonHeader, IonToolbar, IonTitle, IonContent,
@@ -22,7 +23,8 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./menu.page.scss'],
   imports: [
     IonHeader, IonToolbar, IonTitle, IonContent,
-    IonButton, IonIcon, IonGrid, IonRow, IonCol, IonButtons
+    IonButton, IonIcon, IonGrid, IonRow, IonCol, IonButtons,
+    UpperCasePipe
   ]
 })
 export class MenuPage implements OnInit {
