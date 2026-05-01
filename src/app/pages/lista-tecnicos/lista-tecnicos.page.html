@@ -1,0 +1,77 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/menu" text="" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Lista de Técnicos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="lista-content" [fullscreen]="true">
+
+  <div class="lista-container">
+
+    @if (tecnicos.length > 0) {
+      <ion-list class="tecnicos-list">
+        @for (tecnico of tecnicos; track tecnico.id) {
+          <ion-item-sliding>
+            <ion-item
+              class="tecnico-item"
+              [button]="true"
+              (click)="editarTecnico(tecnico.id)"
+              detail="false">
+
+              <!-- Avatar do técnico -->
+              <div class="tecnico-avatar" slot="start">
+                <ion-icon name="person-outline"></ion-icon>
+              </div>
+
+              <ion-label>
+                <div class="tecnico-header">
+                  <h2>{{ tecnico.nome }}</h2>
+                  <ion-badge class="situacao-badge"
+                    [class.situacao-ativo]="tecnico.situacao === 'Ativo'"
+                    [class.situacao-inativo]="tecnico.situacao === 'Inativo'">
+                    {{ tecnico.situacao }}
+                  </ion-badge>
+                </div>
+                <p class="tecnico-especialidade">{{ tecnico.especialidade }}</p>
+                <p class="tecnico-contato">
+                  <ion-icon name="call-outline"></ion-icon>
+                  {{ tecnico.contato }}
+                </p>
+              </ion-label>
+
+              <ion-icon name="chevron-forward-outline" slot="end" class="chevron-icon"></ion-icon>
+            </ion-item>
+
+            <!-- Opções de deslizar -->
+            <ion-item-options side="end">
+              <ion-item-option color="primary" (click)="editarTecnico(tecnico.id)">
+                <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+              </ion-item-option>
+              <ion-item-option color="danger" (click)="excluirTecnico(tecnico.id)">
+                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        }
+      </ion-list>
+    } @else {
+      <div class="empty-state">
+        <ion-icon name="person-outline"></ion-icon>
+        <h3>Nenhum técnico cadastrado</h3>
+        <p>Cadastre o primeiro técnico.</p>
+      </div>
+    }
+
+  </div>
+
+  <!-- FAB para novo técnico -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button id="fab-novo-tecnico" (click)="novoTecnico()" class="custom-fab">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

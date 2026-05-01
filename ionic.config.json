@@ -1,0 +1,7 @@
+{
+  "name": "app-chamados",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

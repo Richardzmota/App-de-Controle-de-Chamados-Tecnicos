@@ -1,0 +1,64 @@
+/* Estilos da Lista de Técnicos */
+
+.lista-content {
+  --background: linear-gradient(160deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+}
+ion-toolbar { --background: transparent; --color: #ffffff; --border-width: 0; }
+
+.lista-container { padding: 8px 16px 80px; max-width: 600px; margin: 0 auto; }
+
+.tecnicos-list { background: transparent; padding: 0; }
+
+.tecnico-item {
+  --background: rgba(255, 255, 255, 0.06);
+  --border-color: rgba(255, 255, 255, 0.06);
+  --padding-start: 12px; --padding-end: 12px;
+  --inner-padding-end: 8px; --min-height: 80px;
+  border-radius: 14px; margin-bottom: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  &:active { transform: scale(0.98); }
+}
+
+.tecnico-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+  display: flex; align-items: center; justify-content: center;
+  margin-right: 4px; flex-shrink: 0;
+  ion-icon { font-size: 20px; color: #0f0c29; }
+}
+
+.tecnico-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  h2 { color: #ffffff; font-size: 15px; font-weight: 600; margin: 0; flex: 1; }
+}
+
+.situacao-badge {
+  font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.situacao-ativo { --background: rgba(52, 211, 153, 0.2); --color: #34d399; }
+.situacao-inativo { --background: rgba(148, 163, 184, 0.2); --color: #94a3b8; }
+
+.tecnico-especialidade { color: rgba(255, 255, 255, 0.55); font-size: 13px; margin: 3px 0 2px; }
+
+.tecnico-contato {
+  color: rgba(255, 255, 255, 0.4); font-size: 12px; margin: 0;
+  display: flex; align-items: center; gap: 4px;
+  ion-icon { font-size: 12px; }
+}
+
+.chevron-icon { color: rgba(255, 255, 255, 0.2); font-size: 18px; }
+
+.empty-state {
+  text-align: center; padding: 60px 20px;
+  ion-icon { font-size: 64px; color: rgba(255, 255, 255, 0.15); margin-bottom: 16px; }
+  h3 { color: rgba(255, 255, 255, 0.5); font-size: 18px; font-weight: 600; margin: 0 0 8px; }
+  p { color: rgba(255, 255, 255, 0.3); font-size: 14px; margin: 0; }
+}
+
+.custom-fab {
+  --background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+  --box-shadow: 0 6px 20px rgba(161, 140, 209, 0.5);
+  ion-icon { color: #0f0c29; }
+}

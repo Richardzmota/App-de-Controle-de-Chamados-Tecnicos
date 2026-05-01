@@ -1,0 +1,136 @@
+/* Estilos do Cadastro de Chamados */
+
+.cadastro-content {
+  --background: linear-gradient(160deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+}
+
+ion-toolbar {
+  --background: transparent;
+  --color: #ffffff;
+  --border-width: 0;
+}
+
+.form-container {
+  padding: 8px 20px 40px;
+  max-width: 500px;
+  margin: 0 auto;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+/* ========== Grupo de Campo ========== */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-label {
+  display: block;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  padding-left: 4px;
+}
+
+.input-wrapper {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 4px 14px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+  &:focus-within {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+  }
+}
+
+// Estado de erro
+.input-error {
+  border-color: rgba(239, 68, 68, 0.5) !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
+
+.error-text {
+  display: block;
+  color: #fb7185;
+  font-size: 12px;
+  margin-top: 4px;
+  padding-left: 4px;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ========== Inputs ========== */
+.form-input {
+  --color: #ffffff;
+  --placeholder-color: rgba(255, 255, 255, 0.3);
+  --padding-start: 0;
+  --padding-end: 0;
+  --background: transparent;
+  font-size: 15px;
+}
+
+/* ========== Selects ========== */
+.select-wrapper {
+  padding: 0 14px;
+}
+
+.form-select {
+  --color: #ffffff;
+  --placeholder-color: rgba(255, 255, 255, 0.3);
+  --padding-start: 0;
+  --padding-end: 0;
+  width: 100%;
+  font-size: 15px;
+}
+
+/* ========== Textarea ========== */
+.textarea-wrapper {
+  padding: 8px 14px;
+}
+
+.form-textarea {
+  --color: #ffffff;
+  --placeholder-color: rgba(255, 255, 255, 0.3);
+  --padding-start: 0;
+  --padding-end: 0;
+  --background: transparent;
+  font-size: 15px;
+  min-height: 80px;
+}
+
+/* ========== Botão Salvar ========== */
+.save-button {
+  --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --background-hover: linear-gradient(135deg, #5a72d4 0%, #6a4296 100%);
+  --border-radius: 14px;
+  --box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  font-size: 16px;
+  font-weight: 600;
+  height: 52px;
+  margin-top: 24px;
+  letter-spacing: 0.5px;
+  transition: transform 0.2s ease;
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+/* ========== Animações ========== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

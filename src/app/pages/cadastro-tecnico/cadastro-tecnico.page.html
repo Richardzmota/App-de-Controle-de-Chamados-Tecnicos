@@ -1,0 +1,105 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/menu" text="" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ tituloTela }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="cadastro-content" [fullscreen]="true">
+
+  <div class="form-container">
+
+    <!-- Nome do Técnico -->
+    <div class="form-group">
+      <label class="form-label">Nome do Técnico *</label>
+      <div class="input-wrapper" [class.input-error]="temErro('nome')">
+        <ion-input
+          id="input-nome-tecnico"
+          type="text"
+          placeholder="Nome completo"
+          [(ngModel)]="nome"
+          maxlength="60"
+          class="form-input">
+        </ion-input>
+      </div>
+      @if (temErro('nome')) {
+        <span class="error-text">{{ erros['nome'] }}</span>
+      }
+    </div>
+
+    <!-- Especialidade -->
+    <div class="form-group">
+      <label class="form-label">Especialidade *</label>
+      <div class="input-wrapper select-wrapper" [class.input-error]="temErro('especialidade')">
+        <ion-select
+          id="select-especialidade"
+          placeholder="Selecione a especialidade"
+          [(ngModel)]="especialidade"
+          interface="action-sheet"
+          class="form-select">
+          <ion-select-option value="Hardware">🖥️ Hardware</ion-select-option>
+          <ion-select-option value="Software">💻 Software</ion-select-option>
+          <ion-select-option value="Rede">🌐 Rede</ion-select-option>
+          <ion-select-option value="Impressora">🖨️ Impressora</ion-select-option>
+          <ion-select-option value="Sistema interno">⚙️ Sistema interno</ion-select-option>
+          <ion-select-option value="Outros">📋 Outros</ion-select-option>
+        </ion-select>
+      </div>
+      @if (temErro('especialidade')) {
+        <span class="error-text">{{ erros['especialidade'] }}</span>
+      }
+    </div>
+
+    <!-- Contato -->
+    <div class="form-group">
+      <label class="form-label">Contato (telefone ou e-mail) *</label>
+      <div class="input-wrapper" [class.input-error]="temErro('contato')">
+        <ion-input
+          id="input-contato"
+          type="text"
+          placeholder="Ex: (11) 99999-9999 ou email@empresa.com"
+          [(ngModel)]="contato"
+          maxlength="60"
+          class="form-input">
+        </ion-input>
+      </div>
+      @if (temErro('contato')) {
+        <span class="error-text">{{ erros['contato'] }}</span>
+      }
+    </div>
+
+    <!-- Situação -->
+    <div class="form-group">
+      <label class="form-label">Situação *</label>
+      <div class="input-wrapper select-wrapper" [class.input-error]="temErro('situacao')">
+        <ion-select
+          id="select-situacao"
+          placeholder="Selecione a situação"
+          [(ngModel)]="situacao"
+          interface="action-sheet"
+          class="form-select">
+          <ion-select-option value="Ativo">✅ Ativo</ion-select-option>
+          <ion-select-option value="Inativo">⛔ Inativo</ion-select-option>
+        </ion-select>
+      </div>
+      @if (temErro('situacao')) {
+        <span class="error-text">{{ erros['situacao'] }}</span>
+      }
+    </div>
+
+    <!-- Botão Salvar -->
+    <ion-button
+      id="btn-salvar-tecnico"
+      expand="block"
+      shape="round"
+      class="save-button"
+      (click)="salvar()">
+      <ion-icon [name]="modoEdicao ? 'checkmark-done-outline' : 'save-outline'" slot="start"></ion-icon>
+      {{ modoEdicao ? 'Atualizar Técnico' : 'Cadastrar Técnico' }}
+    </ion-button>
+
+  </div>
+
+</ion-content>

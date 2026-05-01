@@ -1,0 +1,118 @@
+/* Estilos da Lista de Chamados */
+
+.lista-content {
+  --background: linear-gradient(160deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+}
+
+ion-toolbar { --background: transparent; --color: #ffffff; --border-width: 0; }
+
+.lista-container { padding: 0 16px 80px; max-width: 600px; margin: 0 auto; }
+
+/* Searchbar */
+.custom-searchbar {
+  --background: rgba(255, 255, 255, 0.08);
+  --border-radius: 14px;
+  --color: #ffffff;
+  --placeholder-color: rgba(255, 255, 255, 0.4);
+  --icon-color: rgba(255, 255, 255, 0.4);
+  --clear-button-color: rgba(255, 255, 255, 0.5);
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+/* Segment */
+.custom-segment {
+  --background: rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  margin-bottom: 16px;
+
+  ion-segment-button {
+    --color: rgba(255, 255, 255, 0.5);
+    --color-checked: #ffffff;
+    --indicator-color: rgba(102, 126, 234, 0.6);
+    --border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: none;
+    min-height: 36px;
+  }
+}
+
+/* Lista */
+.chamados-list { background: transparent; padding: 0; }
+
+.chamado-item {
+  --background: rgba(255, 255, 255, 0.06);
+  --border-color: rgba(255, 255, 255, 0.06);
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --inner-padding-end: 8px;
+  --min-height: 90px;
+  border-radius: 14px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+
+  &:active { transform: scale(0.98); }
+}
+
+/* Indicador de Status */
+.status-indicator {
+  width: 40px; height: 40px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  margin-right: 4px; flex-shrink: 0;
+  ion-icon { font-size: 20px; }
+}
+
+.status-aberto { background: rgba(251, 191, 36, 0.15); ion-icon { color: #fbbf24; } }
+.status-andamento { background: rgba(96, 165, 250, 0.15); ion-icon { color: #60a5fa; } }
+.status-concluído { background: rgba(52, 211, 153, 0.15); ion-icon { color: #34d399; } }
+.status-cancelado { background: rgba(148, 163, 184, 0.15); ion-icon { color: #94a3b8; } }
+
+/* Conteúdo do Card */
+.chamado-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 2px;
+  h2 { color: #ffffff; font-size: 14px; font-weight: 600; margin: 0; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}
+
+.priority-badge {
+  font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px;
+  text-transform: uppercase; letter-spacing: 0.5px; flex-shrink: 0;
+}
+.priority-baixa { --background: rgba(52, 211, 153, 0.2); --color: #34d399; }
+.priority-média { --background: rgba(251, 191, 36, 0.2); --color: #fbbf24; }
+.priority-alta { --background: rgba(251, 113, 133, 0.2); --color: #fb7185; }
+.priority-urgente { --background: rgba(239, 68, 68, 0.25); --color: #ef4444; animation: pulse 2s infinite; }
+
+.chamado-info { color: rgba(255, 255, 255, 0.45); font-size: 12px; margin: 2px 0 2px; }
+.chamado-tecnico { color: rgba(255, 255, 255, 0.35); font-size: 11px; margin: 0 0 4px; }
+
+.chamado-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  .chamado-status { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .chamado-data { font-size: 11px; color: rgba(255, 255, 255, 0.3); }
+}
+
+.status-text-aberto { color: #fbbf24; }
+.status-text-andamento { color: #60a5fa; }
+.status-text-concluído { color: #34d399; }
+.status-text-cancelado { color: #94a3b8; }
+
+.chevron-icon { color: rgba(255, 255, 255, 0.2); font-size: 18px; }
+
+/* Estado Vazio */
+.empty-state {
+  text-align: center; padding: 60px 20px;
+  ion-icon { font-size: 64px; color: rgba(255, 255, 255, 0.15); margin-bottom: 16px; }
+  h3 { color: rgba(255, 255, 255, 0.5); font-size: 18px; font-weight: 600; margin: 0 0 8px; }
+  p { color: rgba(255, 255, 255, 0.3); font-size: 14px; margin: 0; }
+}
+
+/* FAB */
+.custom-fab {
+  --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }

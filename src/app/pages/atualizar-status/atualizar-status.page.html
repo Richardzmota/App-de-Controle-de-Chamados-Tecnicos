@@ -1,0 +1,70 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="'/detalhe-chamado/' + chamadoId" text="" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Atualizar Status</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="status-content" [fullscreen]="true">
+
+  <div class="form-container">
+
+    <!-- Informação do chamado -->
+    <div class="chamado-info-card">
+      <span class="info-label">Chamado #{{ chamadoId }}</span>
+      <h2>{{ chamadoTitulo }}</h2>
+    </div>
+
+    <!-- Novo Status -->
+    <div class="form-group">
+      <label class="form-label">Novo Status *</label>
+      <div class="input-wrapper select-wrapper" [class.input-error]="temErro('status')">
+        <ion-select
+          id="select-novo-status"
+          placeholder="Selecione o novo status"
+          [(ngModel)]="novoStatus"
+          interface="action-sheet"
+          class="form-select">
+          <ion-select-option value="Aberto">📋 Aberto</ion-select-option>
+          <ion-select-option value="Em atendimento">⏳ Em atendimento</ion-select-option>
+          <ion-select-option value="Concluído">✅ Concluído</ion-select-option>
+          <ion-select-option value="Cancelado">❌ Cancelado</ion-select-option>
+        </ion-select>
+      </div>
+      @if (temErro('status')) {
+        <span class="error-text">{{ erros['status'] }}</span>
+      }
+    </div>
+
+    <!-- Observação do atendimento -->
+    <div class="form-group">
+      <label class="form-label">Observação do Atendimento</label>
+      <div class="input-wrapper textarea-wrapper">
+        <ion-textarea
+          id="textarea-observacao"
+          placeholder="Registre uma observação sobre o atendimento..."
+          [(ngModel)]="observacao"
+          [rows]="5"
+          [autoGrow]="true"
+          maxlength="500"
+          class="form-textarea">
+        </ion-textarea>
+      </div>
+    </div>
+
+    <!-- Botão Salvar -->
+    <ion-button
+      id="btn-salvar-status"
+      expand="block"
+      shape="round"
+      class="save-button"
+      (click)="salvar()">
+      <ion-icon name="checkmark-done-outline" slot="start"></ion-icon>
+      Salvar Atualização
+    </ion-button>
+
+  </div>
+
+</ion-content>

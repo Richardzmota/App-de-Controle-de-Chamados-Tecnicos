@@ -1,0 +1,81 @@
+<ion-content class="login-content" [fullscreen]="true">
+
+  <!-- Container principal da tela de login -->
+  <div class="login-container">
+
+    <!-- Cabeçalho com logo e título -->
+    <div class="login-header">
+      <div class="logo-circle">
+        <ion-icon name="construct-outline"></ion-icon>
+      </div>
+      <h1>HelpDesk Pro</h1>
+      <p class="subtitle">Sistema de Chamados Técnicos</p>
+    </div>
+
+    <!-- Formulário de login -->
+    <div class="login-form">
+
+      <!-- Campo de usuário com ngModel -->
+      <div class="input-group">
+        <ion-icon name="person-outline" class="input-icon"></ion-icon>
+        <ion-input
+          id="input-usuario"
+          type="text"
+          placeholder="Nome de usuário"
+          [(ngModel)]="usuario"
+          [clearInput]="true"
+          class="custom-input">
+        </ion-input>
+      </div>
+
+      <!-- Campo de senha com ngModel -->
+      <div class="input-group">
+        <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
+        <ion-input
+          id="input-senha"
+          type="password"
+          placeholder="Senha"
+          [(ngModel)]="senha"
+          [clearInput]="true"
+          class="custom-input">
+        </ion-input>
+      </div>
+
+      <!-- Mensagem de erro -->
+      @if (erroLogin) {
+        <div class="error-message">
+          <ion-text color="danger">
+            <p>{{ mensagemErro }}</p>
+          </ion-text>
+        </div>
+      }
+
+      <!-- Botão de login -->
+      <ion-button
+        id="btn-login"
+        expand="block"
+        shape="round"
+        class="login-button"
+        (click)="fazerLogin()"
+        [disabled]="carregando">
+        @if (carregando) {
+          <ion-spinner name="crescent" class="btn-spinner"></ion-spinner>
+        } @else {
+          <ion-icon name="log-in-outline" slot="start"></ion-icon>
+          Entrar
+        }
+      </ion-button>
+
+      <!-- Informações de acesso -->
+      <div class="info-box">
+        <p class="info-title">Credenciais de acesso:</p>
+        <p><strong>admin</strong> / admin123</p>
+        <p><strong>tecnico</strong> / tec123</p>
+        <p><strong>usuario</strong> / user123</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</ion-content>

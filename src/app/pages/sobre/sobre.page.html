@@ -1,0 +1,82 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/menu" text="" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Sobre</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="sobre-content" [fullscreen]="true">
+
+  <div class="sobre-container">
+
+    <!-- Logo e nome do app -->
+    <div class="app-logo">
+      <div class="logo-circle">
+        <ion-icon name="construct-outline"></ion-icon>
+      </div>
+      <h1>HelpDesk Pro</h1>
+      <p class="version">Versão 1.0.0</p>
+    </div>
+
+    <!-- Informações do projeto -->
+    <div class="info-section">
+
+      <div class="info-card">
+        <div class="info-icon-wrapper">
+          <ion-icon name="school-outline"></ion-icon>
+        </div>
+        <div>
+          <span class="info-label">Disciplina</span>
+          <span class="info-value">Desenvolvimento de Aplicativos Mobile</span>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon-wrapper">
+          <ion-icon name="construct-outline"></ion-icon>
+        </div>
+        <div>
+          <span class="info-label">Objetivo do Projeto</span>
+          <span class="info-value">Desenvolver um sistema de chamados técnicos aplicando conceitos de páginas, navegação, formulários, arrays, services e componentes visuais do Ionic.</span>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon-wrapper">
+          <ion-icon name="code-slash-outline"></ion-icon>
+        </div>
+        <div>
+          <span class="info-label">Tecnologias Utilizadas</span>
+          <span class="info-value">Ionic Framework, Angular, TypeScript, SCSS, Capacitor</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Recursos implementados -->
+    <div class="features-section">
+      <h3 class="section-title">Recursos Implementados</h3>
+      <ul class="features-list">
+        <li>✅ Tela de Login com validação</li>
+        <li>✅ Menu Principal com navegação</li>
+        <li>✅ Cadastro de Chamados com formulários ngModel</li>
+        <li>✅ Listagem com filtros e busca</li>
+        <li>✅ Detalhes e atualização de status</li>
+        <li>✅ Cadastro e listagem de técnicos</li>
+        <li>✅ Resumo com estatísticas por status e prioridade</li>
+        <li>✅ Dados armazenados em arrays (sem banco)</li>
+        <li>✅ Compartilhamento via Services Angular</li>
+        <li>✅ Layout responsivo para mobile</li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Feito com <ion-icon name="heart-outline" class="heart-icon"></ion-icon> usando Ionic + Angular</p>
+    </div>
+
+  </div>
+
+</ion-content>
