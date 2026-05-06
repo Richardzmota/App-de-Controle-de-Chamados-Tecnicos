@@ -1,0 +1,129 @@
+<!-- Header com botão voltar -->
+<ion-header class="ion-no-border">
+  <ion-toolbar class="page-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/lista-chamados" text="" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-icon name="document-text-outline" class="header-icon"></ion-icon>
+      Detalhes do Chamado
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Conteúdo dos detalhes -->
+<ion-content class="details-content">
+  <div class="details-container">
+
+    <!-- Chamado não encontrado -->
+    <div class="empty-state" *ngIf="!chamado">
+      <ion-icon name="document-text-outline" class="empty-icon"></ion-icon>
+      <p class="empty-text">Chamado não encontrado.</p>
+      <ion-button fill="outline" color="light" routerLink="/lista-chamados" shape="round">
+        Voltar à Lista
+      </ion-button>
+    </div>
+
+    <!-- Detalhes do chamado -->
+    <div *ngIf="chamado">
+
+      <!-- Cabeçalho com ID e título -->
+      <div class="detail-header">
+        <span class="detail-id">#{{ chamado.id }}</span>
+        <h2 class="detail-title">{{ chamado.titulo }}</h2>
+        <div class="badges-row">
+          <ion-badge [color]="corPrioridade(chamado.prioridade)">{{ chamado.prioridade }}</ion-badge>
+          <ion-badge [color]="corStatus(chamado.status)">{{ chamado.status }}</ion-badge>
+        </div>
+      </div>
+
+      <!-- Card com todos os dados -->
+      <ion-card class="detail-card">
+        <ion-card-content>
+
+          <!-- Solicitante -->
+          <div class="detail-row">
+            <div class="detail-icon-col">
+              <ion-icon name="person-outline" class="detail-icon"></ion-icon>
+            </div>
+            <div class="detail-text-col">
+              <span class="detail-label">Solicitante</span>
+              <span class="detail-value">{{ chamado.solicitante || '—' }}</span>
+            </div>
+          </div>
+
+          <!-- Setor -->
+          <div class="detail-row">
+            <div class="detail-icon-col">
+              <ion-icon name="business-outline" class="detail-icon"></ion-icon>
+            </div>
+            <div class="detail-text-col">
+              <span class="detail-label">Setor</span>
+              <span class="detail-value">{{ chamado.setor || '—' }}</span>
+            </div>
+          </div>
+
+          <!-- Técnico Responsável -->
+          <div class="detail-row">
+            <div class="detail-icon-col">
+              <ion-icon name="construct-outline" class="detail-icon"></ion-icon>
+            </div>
+            <div class="detail-text-col">
+              <span class="detail-label">Técnico Responsável</span>
+              <span class="detail-value">{{ chamado.tecnico }}</span>
+            </div>
+          </div>
+
+          <!-- Data de Abertura -->
+          <div class="detail-row">
+            <div class="detail-icon-col">
+              <ion-icon name="calendar-outline" class="detail-icon"></ion-icon>
+            </div>
+            <div class="detail-text-col">
+              <span class="detail-label">Data de Abertura</span>
+              <span class="detail-value">{{ chamado.dataAbertura || chamado.dataCriacao }}</span>
+            </div>
+          </div>
+
+          <!-- Descrição -->
+          <div class="detail-row description-row">
+            <div class="detail-icon-col">
+              <ion-icon name="document-text-outline" class="detail-icon"></ion-icon>
+            </div>
+            <div class="detail-text-col">
+              <span class="detail-label">Descrição</span>
+              <span class="detail-value">{{ chamado.descricao }}</span>
+            </div>
+          </div>
+
+          <!-- Observação -->
+          <div class="detail-row" *ngIf="chamado.observacao">
+            <div class="detail-icon-col">
+              <ion-icon name="chatbubble-outline" class="detail-icon"></ion-icon>
+            </div>
+            <div class="detail-text-col">
+              <span class="detail-label">Observação</span>
+              <span class="detail-value">{{ chamado.observacao }}</span>
+            </div>
+          </div>
+
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Botão Atualizar Status -->
+      <ion-button
+        *ngIf="podeAtualizar"
+        expand="block"
+        (click)="atualizarStatus()"
+        class="update-button"
+        shape="round"
+        size="large"
+      >
+        <ion-icon name="create-outline" slot="start"></ion-icon>
+        Atualizar Status
+      </ion-button>
+
+    </div>
+
+  </div>
+</ion-content>

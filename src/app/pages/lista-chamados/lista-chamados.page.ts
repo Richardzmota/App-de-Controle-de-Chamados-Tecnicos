@@ -1,114 +1,135 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import {
-  IonHeader, IonToolbar, IonTitle, IonContent,
-  IonIcon, IonButtons, IonBackButton,
-  IonList, IonItem, IonLabel, IonBadge,
-  IonSearchbar, IonSegment, IonSegmentButton,
-  IonFab, IonFabButton, IonItemSliding,
-  IonItemOptions, IonItemOption,
-  AlertController
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardSubtitle,
+  IonCardContent,
+  IonButton,
+  IonIcon,
+  IonBadge,
+  IonButtons,
+  IonBackButton,
+  IonText,
+  AlertController,
+  ToastController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
-  addOutline, trashOutline, createOutline,
-  alertCircleOutline, timeOutline, checkmarkCircleOutline,
-  closeCircleOutline, searchOutline, chevronForwardOutline
+  listOutline,
+  eyeOutline,
+  trashOutline,
+  alertCircleOutline,
+  documentTextOutline
 } from 'ionicons/icons';
 import { ChamadoService } from '../../services/chamado.service';
 
+/**
+ * ListaChamadosPage - Lista todos os chamados cadastrados.
+ * Permite visualizar detalhes e excluir chamados.
+ */
 @Component({
   selector: 'app-lista-chamados',
   templateUrl: './lista-chamados.page.html',
   styleUrls: ['./lista-chamados.page.scss'],
   imports: [
-    FormsModule, IonHeader, IonToolbar, IonTitle, IonContent,
-    IonIcon, IonButtons, IonBackButton,
-    IonList, IonItem, IonLabel, IonBadge,
-    IonSearchbar, IonSegment, IonSegmentButton,
-    IonFab, IonFabButton, IonItemSliding,
-    IonItemOptions, IonItemOption
+    CommonModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardSubtitle,
+    IonCardContent,
+    IonButton,
+    IonIcon,
+    IonBadge,
+    IonButtons,
+    IonBackButton,
+    IonText
   ]
 })
 export class ListaChamadosPage {
-  chamados: any[] = [];
-  filtroStatus: string = 'todos';
-  termoBusca: string = '';
 
   constructor(
-    private chamadoService: ChamadoService,
     private router: Router,
-    private alertController: AlertController
+    private alertCtrl: AlertController,
+    private toastCtrl: ToastController,
+    public chamadoService: ChamadoService
   ) {
-    addIcons({
-      addOutline, trashOutline, createOutline,
-      alertCircleOutline, timeOutline, checkmarkCircleOutline,
-      closeCircleOutline, searchOutline, chevronForwardOutline
-    });
+    addIcons({ listOutline, eyeOutline, trashOutline, alertCircleOutline, documentTextOutline });
   }
 
-  ionViewWillEnter(): void {
-    this.carregarChamados();
-  }
-
-  carregarChamados(): void {
-    let lista = this.chamadoService.filtrarPorStatus(this.filtroStatus);
-    if (this.termoBusca.trim()) {
-      const termo = this.termoBusca.toLowerCase();
-      lista = lista.filter((c: any) =>
-        c.titulo.toLowerCase().includes(termo) ||
-        c.solicitante.toLowerCase().includes(termo) ||
-        c.setor.toLowerCase().includes(termo) ||
-        c.tecnicoResponsavel?.toLowerCase().includes(termo)
-      );
+  /**
+   * Retorna a cor do badge de acordo com a prioridade.
+   */
+  corPrioridade(prioridade: string): string {
+    switch (prioridade) {
+      case 'Urgente': return 'danger';
+      case 'Alta': return 'warning';
+      case 'Média': return 'primary';
+      case 'Baixa': return 'success';
+      default: return 'medium';
     }
-    this.chamados = lista;
   }
 
-  onFiltroChange(evento: any): void {
-    this.filtroStatus = evento.detail.value;
-    this.carregarChamados();
+  /**
+   * Retorna a cor do badge de acordo com o status.
+   */
+  corStatus(status: string): string {
+    switch (status) {
+      case 'Aberto': return 'primary';
+      case 'Em atendimento': return 'warning';
+      case 'Concluído': return 'success';
+      case 'Cancelado': return 'danger';
+      default: return 'medium';
+    }
   }
 
-  onBuscaChange(): void {
-    this.carregarChamados();
-  }
-
+  /**
+   * Navega para a tela de detalhes do chamado.
+   */
   verDetalhes(id: number): void {
-    this.router.navigate(['/detalhe-chamado', id]);
+    this.router.navigate(['/detalhes-chamado', id]);
   }
 
-  novoChamado(): void {
-    this.router.navigate(['/cadastro-chamado']);
-  }
-
-  async excluirChamado(id: number): Promise<void> {
-    const alert = await this.alertController.create({
-      header: 'Confirmar Exclusão',
-      message: 'Deseja realmente excluir este chamado?',
-      cssClass: 'custom-alert',
+  /**
+   * Exibe confirmação e exclui o chamado.
+   */
+  async confirmarExclusao(id: number, titulo: string): Promise<void> {
+    const alert = await this.alertCtrl.create({
+      header: 'Excluir Chamado',
+      message: `Deseja realmente excluir o chamado "${titulo}"?`,
       buttons: [
-        { text: 'Cancelar', role: 'cancel' },
         {
-          text: 'Excluir', role: 'destructive',
-          handler: () => {
-            this.chamadoService.excluir(id);
-            this.carregarChamados();
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Excluir',
+          role: 'destructive',
+          handler: async () => {
+            this.chamadoService.excluirChamado(id);
+            const toast = await this.toastCtrl.create({
+              message: 'Chamado excluído com sucesso!',
+              duration: 2000,
+              position: 'bottom',
+              color: 'danger',
+              icon: 'trash-outline'
+            });
+            await toast.present();
           }
         }
       ]
     });
     await alert.present();
-  }
-
-  getIconeStatus(status: string): string {
-    const icones: Record<string, string> = {
-      'Aberto': 'alert-circle-outline',
-      'Em atendimento': 'time-outline',
-      'Concluído': 'checkmark-circle-outline',
-      'Cancelado': 'close-circle-outline'
-    };
-    return icones[status] || 'alert-circle-outline';
   }
 }

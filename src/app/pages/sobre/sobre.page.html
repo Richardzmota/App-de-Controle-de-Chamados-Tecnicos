@@ -1,82 +1,48 @@
 <ion-header class="ion-no-border">
-  <ion-toolbar>
+  <ion-toolbar class="page-toolbar">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/menu" text="" color="light"></ion-back-button>
     </ion-buttons>
-    <ion-title>Sobre</ion-title>
+    <ion-title>
+      <ion-icon name="information-circle-outline" class="header-icon"></ion-icon>
+      Sobre o Projeto
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="sobre-content" [fullscreen]="true">
-
+<ion-content class="sobre-content">
   <div class="sobre-container">
-
-    <!-- Logo e nome do app -->
     <div class="app-logo">
-      <div class="logo-circle">
-        <ion-icon name="construct-outline"></ion-icon>
-      </div>
-      <h1>HelpDesk Pro</h1>
-      <p class="version">Versão 1.0.0</p>
+      <ion-icon name="information-circle-outline"></ion-icon>
     </div>
+    
+    <ion-card class="info-card">
+      <ion-card-header>
+        <ion-card-title class="app-title">Controle de Chamados Técnicos</ion-card-title>
+      </ion-card-header>
 
-    <!-- Informações do projeto -->
-    <div class="info-section">
+      <ion-card-content>
+        <p class="app-description">
+          Aplicativo desenvolvido para gerenciamento e controle de chamados de suporte técnico.
+          Permite o cadastro de chamados, técnicos e acompanhamento do status e prioridades.
+        </p>
 
-      <div class="info-card">
-        <div class="info-icon-wrapper">
-          <ion-icon name="school-outline"></ion-icon>
+        <div class="info-section">
+          <h3><ion-icon name="school-outline"></ion-icon> Desenvolvedor</h3>
+          <p>Seu Nome / Aluno</p>
+          <p><strong>Disciplina:</strong> Desenvolvimento Mobile</p>
         </div>
-        <div>
-          <span class="info-label">Disciplina</span>
-          <span class="info-value">Desenvolvimento de Aplicativos Mobile</span>
+
+        <div class="info-section">
+          <h3><ion-icon name="code-working-outline"></ion-icon> Tecnologias</h3>
+          <ul class="tech-list">
+            <li>Ionic Framework</li>
+            <li>Angular (Standalone Components)</li>
+            <li>Capacitor</li>
+            <li>HTML5 & SCSS</li>
+          </ul>
         </div>
-      </div>
-
-      <div class="info-card">
-        <div class="info-icon-wrapper">
-          <ion-icon name="construct-outline"></ion-icon>
-        </div>
-        <div>
-          <span class="info-label">Objetivo do Projeto</span>
-          <span class="info-value">Desenvolver um sistema de chamados técnicos aplicando conceitos de páginas, navegação, formulários, arrays, services e componentes visuais do Ionic.</span>
-        </div>
-      </div>
-
-      <div class="info-card">
-        <div class="info-icon-wrapper">
-          <ion-icon name="code-slash-outline"></ion-icon>
-        </div>
-        <div>
-          <span class="info-label">Tecnologias Utilizadas</span>
-          <span class="info-value">Ionic Framework, Angular, TypeScript, SCSS, Capacitor</span>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Recursos implementados -->
-    <div class="features-section">
-      <h3 class="section-title">Recursos Implementados</h3>
-      <ul class="features-list">
-        <li>✅ Tela de Login com validação</li>
-        <li>✅ Menu Principal com navegação</li>
-        <li>✅ Cadastro de Chamados com formulários ngModel</li>
-        <li>✅ Listagem com filtros e busca</li>
-        <li>✅ Detalhes e atualização de status</li>
-        <li>✅ Cadastro e listagem de técnicos</li>
-        <li>✅ Resumo com estatísticas por status e prioridade</li>
-        <li>✅ Dados armazenados em arrays (sem banco)</li>
-        <li>✅ Compartilhamento via Services Angular</li>
-        <li>✅ Layout responsivo para mobile</li>
-      </ul>
-    </div>
-
-    <!-- Footer -->
-    <div class="footer">
-      <p>Feito com <ion-icon name="heart-outline" class="heart-icon"></ion-icon> usando Ionic + Angular</p>
-    </div>
-
+      </ion-card-content>
+    </ion-card>
   </div>
-
 </ion-content>

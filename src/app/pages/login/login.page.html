@@ -1,80 +1,104 @@
-<ion-content class="login-content" [fullscreen]="true">
+<!-- Tela de Login -->
+<ion-content class="login-content">
 
-  <!-- Container principal da tela de login -->
+  <!-- Container centralizado do formulário de login -->
   <div class="login-container">
 
-    <!-- Cabeçalho com logo e título -->
-    <div class="login-header">
+    <!-- Logo / Ícone do aplicativo -->
+    <div class="login-logo">
       <div class="logo-circle">
-        <ion-icon name="construct-outline"></ion-icon>
+        <ion-icon name="build-outline" class="logo-icon"></ion-icon>
       </div>
-      <h1>HelpDesk Pro</h1>
-      <p class="subtitle">Sistema de Chamados Técnicos</p>
+      <h1 class="app-title">Chamados Técnicos</h1>
+      <p class="app-subtitle">Sistema de Controle de Chamados</p>
     </div>
 
-    <!-- Formulário de login -->
-    <div class="login-form">
+    <!-- Card do formulário de login -->
+    <ion-card class="login-card">
+      <ion-card-header>
+        <ion-card-title class="card-title">
+          <ion-icon name="log-in-outline"></ion-icon>
+          Acessar Sistema
+        </ion-card-title>
+      </ion-card-header>
 
-      <!-- Campo de usuário com ngModel -->
-      <div class="input-group">
-        <ion-icon name="person-outline" class="input-icon"></ion-icon>
-        <ion-input
-          id="input-usuario"
-          type="text"
-          placeholder="Nome de usuário"
-          [(ngModel)]="usuario"
-          [clearInput]="true"
-          class="custom-input">
-        </ion-input>
-      </div>
+      <ion-card-content>
 
-      <!-- Campo de senha com ngModel -->
-      <div class="input-group">
-        <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
-        <ion-input
-          id="input-senha"
-          type="password"
-          placeholder="Senha"
-          [(ngModel)]="senha"
-          [clearInput]="true"
-          class="custom-input">
-        </ion-input>
-      </div>
+        <!-- Campo de Usuário -->
+        <ion-item class="login-item" lines="none">
+          <ion-icon name="person-outline" slot="start" class="input-icon"></ion-icon>
+          <ion-input
+            label="Usuário"
+            labelPlacement="floating"
+            type="text"
+            [(ngModel)]="usuario"
+            placeholder="Digite seu usuário"
+            required
+            class="login-input"
+          ></ion-input>
+        </ion-item>
 
-      <!-- Mensagem de erro -->
-      @if (erroLogin) {
-        <div class="error-message">
+        <!-- Campo de Senha -->
+        <ion-item class="login-item" lines="none">
+          <ion-icon name="lock-closed-outline" slot="start" class="input-icon"></ion-icon>
+          <ion-input
+            label="Senha"
+            labelPlacement="floating"
+            type="password"
+            [(ngModel)]="senha"
+            placeholder="Digite sua senha"
+            required
+            class="login-input"
+          ></ion-input>
+        </ion-item>
+
+        <!-- Seleção do Tipo de Usuário -->
+        <ion-item class="login-item" lines="none">
+          <ion-icon name="person-outline" slot="start" class="input-icon"></ion-icon>
+          <ion-select label="Tipo de Acesso" labelPlacement="floating" [(ngModel)]="tipoUsuario" interface="popover" class="login-input">
+            <ion-select-option value="comum">Usuário Comum</ion-select-option>
+            <ion-select-option value="tecnico">Técnico</ion-select-option>
+            <ion-select-option value="admin">Administrador</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+
+
+        <!-- Mensagem de erro -->
+        <div class="error-container" *ngIf="mensagemErro">
           <ion-text color="danger">
-            <p>{{ mensagemErro }}</p>
+            <p class="error-message">
+              <ion-icon name="alert-circle-outline"></ion-icon>
+              {{ mensagemErro }}
+            </p>
           </ion-text>
         </div>
-      }
 
-      <!-- Botão de login -->
-      <ion-button
-        id="btn-login"
-        expand="block"
-        shape="round"
-        class="login-button"
-        (click)="fazerLogin()"
-        [disabled]="carregando">
-        @if (carregando) {
-          <ion-spinner name="crescent" class="btn-spinner"></ion-spinner>
-        } @else {
+        <!-- Botão Entrar -->
+        <ion-button
+          expand="block"
+          (click)="entrar()"
+          class="login-button"
+          shape="round"
+          size="large"
+        >
           <ion-icon name="log-in-outline" slot="start"></ion-icon>
           Entrar
-        }
-      </ion-button>
+        </ion-button>
 
-      <!-- Informações de acesso -->
-      <div class="info-box">
-        <p class="info-title">Credenciais de acesso:</p>
-        <p><strong>admin</strong> / admin123</p>
-        <p><strong>tecnico</strong> / tec123</p>
-        <p><strong>usuario</strong> / user123</p>
-      </div>
+        <!-- Dica de Logins -->
+        <div class="login-hint">
+          <p>Dica de acessos:</p>
+          <p><strong>Admin:</strong> admin / 123</p>
+          <p><strong>Técnico:</strong> tecnico / 123</p>
+          <small>(Qualquer credencial funciona para fins de teste)</small>
+        </div>
 
-    </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Rodapé -->
+    <p class="login-footer">v1.0 — Controle de Chamados Técnicos</p>
 
   </div>
 

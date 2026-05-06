@@ -1,73 +1,146 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import {
-  IonHeader, IonToolbar, IonTitle, IonContent,
-  IonButton, IonIcon, IonButtons, IonBackButton,
-  IonSelect, IonSelectOption, IonTextarea,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonItem,
+  IonSelect,
+  IonSelectOption,
+  IonTextarea,
+  IonButton,
+  IonIcon,
+  IonText,
+  IonBadge,
+  IonButtons,
+  IonBackButton,
   ToastController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { checkmarkDoneOutline } from 'ionicons/icons';
+import {
+  saveOutline,
+  createOutline,
+  alertCircleOutline,
+  checkmarkCircleOutline
+} from 'ionicons/icons';
 import { ChamadoService } from '../../services/chamado.service';
 
+/**
+ * AtualizarStatusPage - Formulário para atualizar o status de um chamado.
+ * Permite selecionar um novo status e adicionar uma observação.
+ * Utiliza ngModel para binding dos campos.
+ */
 @Component({
   selector: 'app-atualizar-status',
   templateUrl: './atualizar-status.page.html',
   styleUrls: ['./atualizar-status.page.scss'],
   imports: [
-    FormsModule, IonHeader, IonToolbar, IonTitle, IonContent,
-    IonButton, IonIcon, IonButtons, IonBackButton,
-    IonSelect, IonSelectOption, IonTextarea
+    CommonModule,
+    FormsModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    IonItem,
+    IonSelect,
+    IonSelectOption,
+    IonTextarea,
+    IonButton,
+    IonIcon,
+    IonText,
+    IonBadge,
+    IonButtons,
+    IonBackButton
   ]
 })
 export class AtualizarStatusPage implements OnInit {
-  chamadoId: number = 0;
-  chamadoTitulo: string = '';
-  novoStatus: any = '';
+
+  // Dados do chamado carregado
+  chamado: any = null;
+
+  // Campos do formulário (vinculados com ngModel)
+  novoStatus: string = '';
   observacao: string = '';
-  erros: { [campo: string]: string } = {};
+
+  // Mensagem de erro
+  mensagemErro: string = '';
+
+  // Opções de status disponíveis
+  statusOptions: string[] = ['Aberto', 'Em atendimento', 'Concluído', 'Cancelado'];
 
   constructor(
-    private chamadoService: ChamadoService,
-    private router: Router,
     private route: ActivatedRoute,
-    private toastController: ToastController
+    private router: Router,
+    private toastCtrl: ToastController,
+    public chamadoService: ChamadoService
   ) {
-    addIcons({ checkmarkDoneOutline });
+    addIcons({ saveOutline, createOutline, alertCircleOutline, checkmarkCircleOutline });
   }
 
+  /**
+   * Carrega o chamado pelo ID da rota e preenche os campos atuais.
+   */
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      const chamado = this.chamadoService.buscarPorId(Number(id));
-      if (chamado) {
-        this.chamadoId = chamado.id;
-        this.chamadoTitulo = chamado.titulo;
-        this.novoStatus = chamado.status;
-        this.observacao = chamado.observacao;
-      } else {
-        this.router.navigate(['/lista-chamados']);
-      }
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.chamado = this.chamadoService.buscarChamadoPorId(id);
+
+    if (this.chamado) {
+      // Preenche com os valores atuais do chamado
+      this.novoStatus = this.chamado.status;
+      this.observacao = this.chamado.observacao || '';
     }
   }
 
+  /**
+   * Retorna a cor do badge de acordo com o status.
+   */
+  corStatus(status: string): string {
+    switch (status) {
+      case 'Aberto': return 'primary';
+      case 'Em atendimento': return 'warning';
+      case 'Concluído': return 'success';
+      case 'Cancelado': return 'danger';
+      default: return 'medium';
+    }
+  }
+
+  /**
+   * Valida e salva a atualização do status via service.
+   */
   async salvar(): Promise<void> {
-    this.erros = {};
+    this.mensagemErro = '';
+
+    // Validação: status deve ser selecionado
     if (!this.novoStatus) {
-      this.erros['status'] = 'Selecione o novo status.';
+      this.mensagemErro = 'Selecione um status.';
       return;
     }
-    this.chamadoService.atualizarStatus(this.chamadoId, this.novoStatus, this.observacao.trim());
-    const toast = await this.toastController.create({
+
+    // Atualiza via service
+    this.chamadoService.atualizarStatus(this.chamado.id, this.novoStatus, this.observacao.trim());
+
+    // Exibe mensagem de sucesso
+    const toast = await this.toastCtrl.create({
       message: 'Status atualizado com sucesso!',
-      duration: 2500, position: 'bottom', color: 'success', cssClass: 'custom-toast'
+      duration: 2000,
+      position: 'bottom',
+      color: 'success',
+      icon: 'checkmark-circle-outline'
     });
     await toast.present();
-    this.router.navigate(['/detalhe-chamado', this.chamadoId]);
-  }
 
-  temErro(campo: string): boolean {
-    return !!this.erros[campo];
+    // Volta para os detalhes do chamado
+    this.router.navigate(['/detalhes-chamado', this.chamado.id]);
   }
 }

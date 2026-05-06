@@ -1,65 +1,82 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import {
-  IonHeader, IonToolbar, IonTitle, IonContent,
-  IonIcon, IonButtons, IonBackButton,
-  IonList, IonItem, IonLabel, IonBadge,
-  IonFab, IonFabButton, IonItemSliding,
-  IonItemOptions, IonItemOption,
-  AlertController
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardSubtitle,
+  IonCardContent,
+  IonButton,
+  IonIcon,
+  IonBadge,
+  IonButtons,
+  IonBackButton,
+  AlertController,
+  ToastController
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { addOutline, trashOutline, createOutline, personOutline, callOutline, chevronForwardOutline } from 'ionicons/icons';
-import { TecnicoService } from '../../services/tecnico.service';
-import { Tecnico } from '../../models/tecnico.model';
+import { peopleOutline, trashOutline, personOutline } from 'ionicons/icons';
+import { ChamadoService } from '../../services/chamado.service';
 
 @Component({
   selector: 'app-lista-tecnicos',
   templateUrl: './lista-tecnicos.page.html',
   styleUrls: ['./lista-tecnicos.page.scss'],
   imports: [
-    IonHeader, IonToolbar, IonTitle, IonContent,
-    IonIcon, IonButtons, IonBackButton,
-    IonList, IonItem, IonLabel, IonBadge,
-    IonFab, IonFabButton, IonItemSliding,
-    IonItemOptions, IonItemOption
+    CommonModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardSubtitle,
+    IonCardContent,
+    IonButton,
+    IonIcon,
+    IonBadge,
+    IonButtons,
+    IonBackButton
   ]
 })
 export class ListaTecnicosPage {
-  tecnicos: Tecnico[] = [];
-
   constructor(
-    private tecnicoService: TecnicoService,
-    private router: Router,
-    private alertController: AlertController
+    private alertCtrl: AlertController,
+    private toastCtrl: ToastController,
+    public chamadoService: ChamadoService
   ) {
-    addIcons({ addOutline, trashOutline, createOutline, personOutline, callOutline, chevronForwardOutline });
+    addIcons({ peopleOutline, trashOutline, personOutline });
   }
 
-  ionViewWillEnter(): void {
-    this.tecnicos = this.tecnicoService.listarTodos();
+  corSituacao(situacao: string): string {
+    return situacao === 'Ativo' ? 'success' : 'medium';
   }
 
-  novoTecnico(): void {
-    this.router.navigate(['/cadastro-tecnico']);
-  }
-
-  editarTecnico(id: number): void {
-    this.router.navigate(['/cadastro-tecnico', id]);
-  }
-
-  async excluirTecnico(id: number): Promise<void> {
-    const alert = await this.alertController.create({
-      header: 'Confirmar Exclusão',
-      message: 'Deseja realmente excluir este técnico?',
-      cssClass: 'custom-alert',
+  async confirmarExclusao(id: number, nome: string): Promise<void> {
+    const alert = await this.alertCtrl.create({
+      header: 'Excluir Técnico',
+      message: `Deseja realmente excluir o técnico "${nome}"?`,
       buttons: [
         { text: 'Cancelar', role: 'cancel' },
         {
-          text: 'Excluir', role: 'destructive',
-          handler: () => {
-            this.tecnicoService.excluir(id);
-            this.tecnicos = this.tecnicoService.listarTodos();
+          text: 'Excluir',
+          role: 'destructive',
+          handler: async () => {
+            this.chamadoService.excluirTecnico(id);
+            const toast = await this.toastCtrl.create({
+              message: 'Técnico excluído com sucesso!',
+              duration: 2000,
+              position: 'bottom',
+              color: 'danger',
+              icon: 'trash-outline'
+            });
+            await toast.present();
           }
         }
       ]

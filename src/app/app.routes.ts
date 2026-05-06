@@ -1,71 +1,68 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth.guard';
 
 /**
- * Definição de rotas do aplicativo.
- * Configuração de navegação entre todas as telas obrigatórias.
+ * Configuração de rotas do aplicativo.
+ * A rota padrão redireciona para a tela de login.
  */
 export const routes: Routes = [
-  // Tela de Login
   {
     path: 'login',
-    loadComponent: () => import('./pages/login/login.page').then(m => m.LoginPage),
+    loadComponent: () => import('./pages/login/login.page').then((m) => m.LoginPage),
   },
-  // Menu Principal
   {
     path: 'menu',
-    loadComponent: () => import('./pages/menu/menu.page').then(m => m.MenuPage),
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/menu/menu.page').then((m) => m.MenuPage),
   },
-  // Cadastro de Chamado (novo)
   {
-    path: 'cadastro-chamado',
-    loadComponent: () => import('./pages/cadastro-chamado/cadastro-chamado.page').then(m => m.CadastroChamadoPage),
+    path: 'cadastrar-chamado',
+    canActivate: [authGuard],
+    data: { roles: ['comum', 'admin'] },
+    loadComponent: () => import('./pages/cadastrar-chamado/cadastrar-chamado.page').then((m) => m.CadastrarChamadoPage),
   },
-  // Cadastro de Chamado (edição)
-  {
-    path: 'cadastro-chamado/:id',
-    loadComponent: () => import('./pages/cadastro-chamado/cadastro-chamado.page').then(m => m.CadastroChamadoPage),
-  },
-  // Lista de Chamados
   {
     path: 'lista-chamados',
-    loadComponent: () => import('./pages/lista-chamados/lista-chamados.page').then(m => m.ListaChamadosPage),
+    canActivate: [authGuard],
+    data: { roles: ['comum', 'tecnico', 'admin'] },
+    loadComponent: () => import('./pages/lista-chamados/lista-chamados.page').then((m) => m.ListaChamadosPage),
   },
-  // Detalhes do Chamado
   {
-    path: 'detalhe-chamado/:id',
-    loadComponent: () => import('./pages/detalhe-chamado/detalhe-chamado.page').then(m => m.DetalheChamadoPage),
+    path: 'detalhes-chamado/:id',
+    canActivate: [authGuard],
+    data: { roles: ['comum', 'tecnico', 'admin'] },
+    loadComponent: () => import('./pages/detalhes-chamado/detalhes-chamado.page').then((m) => m.DetalhesChamadoPage),
   },
-  // Atualização de Status
   {
     path: 'atualizar-status/:id',
-    loadComponent: () => import('./pages/atualizar-status/atualizar-status.page').then(m => m.AtualizarStatusPage),
+    canActivate: [authGuard],
+    data: { roles: ['tecnico', 'admin'] },
+    loadComponent: () => import('./pages/atualizar-status/atualizar-status.page').then((m) => m.AtualizarStatusPage),
   },
-  // Cadastro de Técnico (novo)
   {
-    path: 'cadastro-tecnico',
-    loadComponent: () => import('./pages/cadastro-tecnico/cadastro-tecnico.page').then(m => m.CadastroTecnicoPage),
+    path: 'cadastrar-tecnico',
+    canActivate: [authGuard],
+    data: { roles: ['tecnico', 'admin'] },
+    loadComponent: () => import('./pages/cadastrar-tecnico/cadastrar-tecnico.page').then((m) => m.CadastrarTecnicoPage),
   },
-  // Cadastro de Técnico (edição)
-  {
-    path: 'cadastro-tecnico/:id',
-    loadComponent: () => import('./pages/cadastro-tecnico/cadastro-tecnico.page').then(m => m.CadastroTecnicoPage),
-  },
-  // Lista de Técnicos
   {
     path: 'lista-tecnicos',
-    loadComponent: () => import('./pages/lista-tecnicos/lista-tecnicos.page').then(m => m.ListaTecnicosPage),
+    canActivate: [authGuard],
+    data: { roles: ['admin'] },
+    loadComponent: () => import('./pages/lista-tecnicos/lista-tecnicos.page').then((m) => m.ListaTecnicosPage),
   },
-  // Resumo dos Chamados
   {
     path: 'resumo',
-    loadComponent: () => import('./pages/resumo/resumo.page').then(m => m.ResumoPage),
+    canActivate: [authGuard],
+    data: { roles: ['comum', 'tecnico', 'admin'] },
+    loadComponent: () => import('./pages/resumo/resumo.page').then((m) => m.ResumoPage),
   },
-  // Sobre o Aplicativo
   {
     path: 'sobre',
-    loadComponent: () => import('./pages/sobre/sobre.page').then(m => m.SobrePage),
+    canActivate: [authGuard],
+    data: { roles: ['comum', 'tecnico', 'admin'] },
+    loadComponent: () => import('./pages/sobre/sobre.page').then((m) => m.SobrePage),
   },
-  // Rota padrão → Login
   {
     path: '',
     redirectTo: 'login',

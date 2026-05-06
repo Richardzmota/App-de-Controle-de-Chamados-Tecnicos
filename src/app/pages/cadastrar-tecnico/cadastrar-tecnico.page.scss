@@ -1,0 +1,11 @@
+@import '../cadastrar-chamado/cadastrar-chamado.page.scss';
+.header-icon {
+  color: #533483;
+}
+.save-button {
+  --background: linear-gradient(135deg, #533483, #3d2664);
+  --box-shadow: 0 6px 24px rgba(83, 52, 131, 0.35);
+}
+.form-item:focus-within {
+  border-color: #533483;
+}

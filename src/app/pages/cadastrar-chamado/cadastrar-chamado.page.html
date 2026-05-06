@@ -1,0 +1,151 @@
+<!-- Header com botão voltar -->
+<ion-header class="ion-no-border">
+  <ion-toolbar class="page-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/menu" text="" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-icon name="add-circle-outline" class="header-icon"></ion-icon>
+      Cadastrar Chamado
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- Conteúdo do formulário -->
+<ion-content class="form-content">
+  <div class="form-container">
+
+    <ion-card class="form-card">
+      <ion-card-header>
+        <ion-card-title class="card-title">Novo Chamado Técnico</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+
+        <!-- Solicitante (obrigatório) -->
+        <ion-item class="form-item" lines="none">
+          <ion-input
+            label="Solicitante *"
+            labelPlacement="floating"
+            type="text"
+            [(ngModel)]="solicitante"
+            placeholder="Nome do solicitante"
+          ></ion-input>
+        </ion-item>
+
+        <!-- Setor -->
+        <ion-item class="form-item" lines="none">
+          <ion-input
+            label="Setor"
+            labelPlacement="floating"
+            type="text"
+            [(ngModel)]="setor"
+            placeholder="Setor do solicitante"
+          ></ion-input>
+        </ion-item>
+
+        <!-- Título (obrigatório) -->
+        <ion-item class="form-item" lines="none">
+          <ion-input
+            label="Título *"
+            labelPlacement="floating"
+            type="text"
+            [(ngModel)]="titulo"
+            placeholder="Título do chamado"
+          ></ion-input>
+        </ion-item>
+
+        <!-- Descrição (obrigatório) -->
+        <ion-item class="form-item" lines="none">
+          <ion-textarea
+            label="Descrição *"
+            labelPlacement="floating"
+            [(ngModel)]="descricao"
+            placeholder="Descreva o problema detalhadamente"
+            rows="4"
+            autoGrow="true"
+          ></ion-textarea>
+        </ion-item>
+
+        <!-- Prioridade (obrigatório) -->
+        <ion-item class="form-item" lines="none">
+          <ion-select
+            label="Prioridade *"
+            labelPlacement="floating"
+            [(ngModel)]="prioridade"
+            placeholder="Selecione a prioridade"
+            interface="action-sheet"
+          >
+            <ion-select-option *ngFor="let p of prioridades" [value]="p">
+              {{ p }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <!-- Data de Abertura -->
+        <ion-item class="form-item" lines="none">
+          <ion-input
+            label="Data de Abertura"
+            labelPlacement="floating"
+            type="text"
+            [(ngModel)]="dataAbertura"
+            [readonly]="true"
+          ></ion-input>
+        </ion-item>
+
+        <!-- Técnico Responsável (obrigatório) -->
+        <ion-item class="form-item" lines="none">
+          <ion-select
+            label="Técnico Responsável *"
+            labelPlacement="floating"
+            [(ngModel)]="tecnico"
+            placeholder="Selecione o técnico"
+            interface="action-sheet"
+          >
+            <ion-select-option
+              *ngFor="let t of chamadoService.listarTecnicos()"
+              [value]="t.nome"
+            >
+              {{ t.nome }} — {{ t.especialidade }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <!-- Status (fixo: Aberto) -->
+        <ion-item class="form-item" lines="none">
+          <ion-input
+            label="Status"
+            labelPlacement="floating"
+            type="text"
+            value="Aberto"
+            [readonly]="true"
+          ></ion-input>
+        </ion-item>
+
+        <!-- Mensagem de erro -->
+        <div class="error-container" *ngIf="mensagemErro">
+          <ion-text color="danger">
+            <p class="error-message">
+              <ion-icon name="alert-circle-outline"></ion-icon>
+              {{ mensagemErro }}
+            </p>
+          </ion-text>
+        </div>
+
+        <!-- Botão Salvar -->
+        <ion-button
+          expand="block"
+          (click)="salvar()"
+          class="save-button"
+          shape="round"
+          size="large"
+        >
+          <ion-icon name="save-outline" slot="start"></ion-icon>
+          Salvar Chamado
+        </ion-button>
+
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+</ion-content>

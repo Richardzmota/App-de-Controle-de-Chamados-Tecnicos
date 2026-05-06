@@ -1,70 +1,101 @@
+<!-- Header com botão voltar -->
 <ion-header class="ion-no-border">
-  <ion-toolbar>
+  <ion-toolbar class="page-toolbar">
     <ion-buttons slot="start">
-      <ion-back-button [defaultHref]="'/detalhe-chamado/' + chamadoId" text="" color="light"></ion-back-button>
+      <ion-back-button [defaultHref]="'/detalhes-chamado/' + (chamado?.id || '')" text="" color="light"></ion-back-button>
     </ion-buttons>
-    <ion-title>Atualizar Status</ion-title>
+    <ion-title>
+      <ion-icon name="create-outline" class="header-icon"></ion-icon>
+      Atualizar Status
+    </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="status-content" [fullscreen]="true">
-
+<!-- Conteúdo do formulário -->
+<ion-content class="form-content">
   <div class="form-container">
 
-    <!-- Informação do chamado -->
-    <div class="chamado-info-card">
-      <span class="info-label">Chamado #{{ chamadoId }}</span>
-      <h2>{{ chamadoTitulo }}</h2>
+    <!-- Chamado não encontrado -->
+    <div class="empty-state" *ngIf="!chamado">
+      <ion-text color="light">
+        <p>Chamado não encontrado.</p>
+      </ion-text>
     </div>
 
-    <!-- Novo Status -->
-    <div class="form-group">
-      <label class="form-label">Novo Status *</label>
-      <div class="input-wrapper select-wrapper" [class.input-error]="temErro('status')">
-        <ion-select
-          id="select-novo-status"
-          placeholder="Selecione o novo status"
-          [(ngModel)]="novoStatus"
-          interface="action-sheet"
-          class="form-select">
-          <ion-select-option value="Aberto">📋 Aberto</ion-select-option>
-          <ion-select-option value="Em atendimento">⏳ Em atendimento</ion-select-option>
-          <ion-select-option value="Concluído">✅ Concluído</ion-select-option>
-          <ion-select-option value="Cancelado">❌ Cancelado</ion-select-option>
-        </ion-select>
+    <!-- Formulário de atualização -->
+    <div *ngIf="chamado">
+
+      <!-- Resumo do chamado -->
+      <div class="chamado-resume">
+        <span class="resume-id">#{{ chamado.id }}</span>
+        <h3 class="resume-title">{{ chamado.titulo }}</h3>
+        <p class="resume-info">Solicitante: {{ chamado.solicitante }}</p>
+        <div class="resume-badges">
+          <ion-badge [color]="corStatus(chamado.status)">Status atual: {{ chamado.status }}</ion-badge>
+        </div>
       </div>
-      @if (temErro('status')) {
-        <span class="error-text">{{ erros['status'] }}</span>
-      }
-    </div>
 
-    <!-- Observação do atendimento -->
-    <div class="form-group">
-      <label class="form-label">Observação do Atendimento</label>
-      <div class="input-wrapper textarea-wrapper">
-        <ion-textarea
-          id="textarea-observacao"
-          placeholder="Registre uma observação sobre o atendimento..."
-          [(ngModel)]="observacao"
-          [rows]="5"
-          [autoGrow]="true"
-          maxlength="500"
-          class="form-textarea">
-        </ion-textarea>
-      </div>
-    </div>
+      <!-- Card do formulário -->
+      <ion-card class="form-card">
+        <ion-card-header>
+          <ion-card-title class="card-title">Novo Status</ion-card-title>
+        </ion-card-header>
 
-    <!-- Botão Salvar -->
-    <ion-button
-      id="btn-salvar-status"
-      expand="block"
-      shape="round"
-      class="save-button"
-      (click)="salvar()">
-      <ion-icon name="checkmark-done-outline" slot="start"></ion-icon>
-      Salvar Atualização
-    </ion-button>
+        <ion-card-content>
+
+          <!-- Seleção do novo status -->
+          <ion-item class="form-item" lines="none">
+            <ion-select
+              label="Status *"
+              labelPlacement="floating"
+              [(ngModel)]="novoStatus"
+              placeholder="Selecione o novo status"
+              interface="action-sheet"
+            >
+              <ion-select-option *ngFor="let s of statusOptions" [value]="s">
+                {{ s }}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <!-- Campo de observação -->
+          <ion-item class="form-item" lines="none">
+            <ion-textarea
+              label="Observação"
+              labelPlacement="floating"
+              [(ngModel)]="observacao"
+              placeholder="Adicione uma observação (opcional)"
+              rows="4"
+              autoGrow="true"
+            ></ion-textarea>
+          </ion-item>
+
+          <!-- Mensagem de erro -->
+          <div class="error-container" *ngIf="mensagemErro">
+            <ion-text color="danger">
+              <p class="error-message">
+                <ion-icon name="alert-circle-outline"></ion-icon>
+                {{ mensagemErro }}
+              </p>
+            </ion-text>
+          </div>
+
+          <!-- Botão Salvar -->
+          <ion-button
+            expand="block"
+            (click)="salvar()"
+            class="save-button"
+            shape="round"
+            size="large"
+          >
+            <ion-icon name="save-outline" slot="start"></ion-icon>
+            Salvar Alteração
+          </ion-button>
+
+        </ion-card-content>
+      </ion-card>
+
+    </div>
 
   </div>
-
 </ion-content>

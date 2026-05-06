@@ -1,40 +1,51 @@
 import { Injectable } from '@angular/core';
 
+export type UserRole = 'comum' | 'tecnico' | 'admin';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private usuarios = [
-    { usuario: 'admin', senha: 'admin123', nome: 'Administrador' },
-    { usuario: 'tecnico', senha: 'tec123', nome: 'Técnico de Suporte' },
-    { usuario: 'usuario', senha: 'user123', nome: 'Usuário Comum' }
-  ];
-
-  private logado: boolean = false;
-  private nomeUsuario: string = '';
+  private currentUserRole: UserRole | null = null;
+  private currentUsername: string | null = null;
 
   constructor() {}
 
-  login(usuario: string, senha: string): boolean {
-    const encontrado = this.usuarios.find(u => u.usuario === usuario && u.senha === senha);
-    if (encontrado) {
-      this.logado = true;
-      this.nomeUsuario = encontrado.nome;
-      return true;
-    }
-    return false;
+  /**
+   * Realiza login definindo o usuário e o tipo de perfil (simulado)
+   */
+  login(username: string, role: UserRole): void {
+    this.currentUsername = username;
+    this.currentUserRole = role;
   }
 
+  /**
+   * Remove as credenciais do usuário atual
+   */
   logout(): void {
-    this.logado = false;
-    this.nomeUsuario = '';
+    this.currentUsername = null;
+    this.currentUserRole = null;
   }
 
-  estaLogado(): boolean {
-    return this.logado;
+  /**
+   * Verifica se há um usuário logado
+   */
+  isLoggedIn(): boolean {
+    return this.currentUserRole !== null;
   }
 
-  getNomeUsuario(): string {
-    return this.nomeUsuario;
+  /**
+   * Retorna o perfil do usuário logado
+   */
+  getUserRole(): UserRole | null {
+    return this.currentUserRole;
+  }
+
+  /**
+   * Verifica se o usuário atual possui um dos perfis informados
+   */
+  hasRole(roles: UserRole[]): boolean {
+    if (!this.currentUserRole) return false;
+    return roles.includes(this.currentUserRole);
   }
 }

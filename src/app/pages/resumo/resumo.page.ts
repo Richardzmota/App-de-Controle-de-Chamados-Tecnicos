@@ -1,15 +1,23 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
-  IonHeader, IonToolbar, IonTitle, IonContent,
-  IonIcon, IonButtons, IonBackButton,
-  IonGrid, IonRow, IonCol
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonIcon,
+  IonButtons,
+  IonBackButton,
+  IonGrid,
+  IonRow,
+  IonCol
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import {
-  statsChartOutline, alertCircleOutline, timeOutline,
-  checkmarkCircleOutline, closeCircleOutline,
-  arrowDownOutline, removeOutline, arrowUpOutline, flashOutline
-} from 'ionicons/icons';
+import { statsChartOutline, alertCircleOutline, checkmarkCircleOutline, closeCircleOutline, warningOutline } from 'ionicons/icons';
 import { ChamadoService } from '../../services/chamado.service';
 
 @Component({
@@ -17,26 +25,45 @@ import { ChamadoService } from '../../services/chamado.service';
   templateUrl: './resumo.page.html',
   styleUrls: ['./resumo.page.scss'],
   imports: [
-    IonHeader, IonToolbar, IonTitle, IonContent,
-    IonIcon, IonButtons, IonBackButton,
-    IonGrid, IonRow, IonCol
+    CommonModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    IonIcon,
+    IonButtons,
+    IonBackButton,
+    IonGrid,
+    IonRow,
+    IonCol
   ]
 })
 export class ResumoPage {
-  stats: any = {
-    abertos: 0, emAtendimento: 0, concluidos: 0, cancelados: 0,
-    total: 0, baixa: 0, media: 0, alta: 0, urgente: 0
-  };
-
-  constructor(private chamadoService: ChamadoService) {
-    addIcons({
-      statsChartOutline, alertCircleOutline, timeOutline,
-      checkmarkCircleOutline, closeCircleOutline,
-      arrowDownOutline, removeOutline, arrowUpOutline, flashOutline
-    });
+  constructor(public chamadoService: ChamadoService) {
+    addIcons({ statsChartOutline, alertCircleOutline, checkmarkCircleOutline, closeCircleOutline, warningOutline });
   }
 
-  ionViewWillEnter(): void {
-    this.stats = this.chamadoService.obterEstatisticas();
+  get quantidadePorStatus() {
+    const chamados = this.chamadoService.listarChamados();
+    return {
+      aberto: chamados.filter(c => c.status === 'Aberto').length,
+      emAtendimento: chamados.filter(c => c.status === 'Em atendimento').length,
+      concluido: chamados.filter(c => c.status === 'Concluído').length,
+      cancelado: chamados.filter(c => c.status === 'Cancelado').length
+    };
+  }
+
+  get quantidadePorPrioridade() {
+    const chamados = this.chamadoService.listarChamados();
+    return {
+      baixa: chamados.filter(c => c.prioridade === 'Baixa').length,
+      media: chamados.filter(c => c.prioridade === 'Média').length,
+      alta: chamados.filter(c => c.prioridade === 'Alta').length,
+      urgente: chamados.filter(c => c.prioridade === 'Urgente').length
+    };
   }
 }

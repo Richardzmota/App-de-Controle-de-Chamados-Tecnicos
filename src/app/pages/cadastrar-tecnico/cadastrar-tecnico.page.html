@@ -1,0 +1,89 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="page-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/menu" text="" color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <ion-icon name="person-add-outline" class="header-icon"></ion-icon>
+      Cadastrar Técnico
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="form-content">
+  <div class="form-container">
+    <ion-card class="form-card">
+      <ion-card-header>
+        <ion-card-title class="card-title">Novo Técnico</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item class="form-item" lines="none">
+          <ion-input
+            label="Nome *"
+            labelPlacement="floating"
+            type="text"
+            [(ngModel)]="nome"
+            placeholder="Nome do técnico"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item class="form-item" lines="none">
+          <ion-select
+            label="Especialidade"
+            labelPlacement="floating"
+            [(ngModel)]="especialidade"
+            placeholder="Selecione a especialidade"
+            interface="action-sheet"
+          >
+            <ion-select-option *ngFor="let e of especialidades" [value]="e">
+              {{ e }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="form-item" lines="none">
+          <ion-input
+            label="Contato *"
+            labelPlacement="floating"
+            type="text"
+            [(ngModel)]="contato"
+            placeholder="Telefone ou Email"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item class="form-item" lines="none">
+          <ion-select
+            label="Situação"
+            labelPlacement="floating"
+            [(ngModel)]="situacao"
+            interface="action-sheet"
+          >
+            <ion-select-option value="Ativo">Ativo</ion-select-option>
+            <ion-select-option value="Inativo">Inativo</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <div class="error-container" *ngIf="mensagemErro">
+          <ion-text color="danger">
+            <p class="error-message">
+              <ion-icon name="alert-circle-outline"></ion-icon>
+              {{ mensagemErro }}
+            </p>
+          </ion-text>
+        </div>
+
+        <ion-button
+          expand="block"
+          (click)="salvar()"
+          class="save-button"
+          shape="round"
+          size="large"
+        >
+          <ion-icon name="save-outline" slot="start"></ion-icon>
+          Salvar Técnico
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

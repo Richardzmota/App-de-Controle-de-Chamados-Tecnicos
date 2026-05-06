@@ -1,75 +1,140 @@
 import { Injectable } from '@angular/core';
-import { Chamado } from '../models/chamado.model';
 
+/**
+ * ChamadoService - Service global para gerenciar chamados técnicos e técnicos.
+ * Utiliza arrays em memória (sem banco de dados).
+ * Compartilhado entre todos os componentes via injeção de dependência.
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class ChamadoService {
-  private chamados: Chamado[] = [];
-  private proximoId: number = 1;
+
+  // Array para armazenar os chamados técnicos
+  chamados: any[] = [];
+
+  // Array para armazenar os técnicos cadastrados
+  tecnicos: any[] = [];
+
+  // Contador para gerar IDs únicos dos chamados
+  private proximoIdChamado: number = 1;
+
+  // Contador para gerar IDs únicos dos técnicos
+  private proximoIdTecnico: number = 1;
 
   constructor() {
-    this.carregarExemplos();
+    // Dados de exemplo para facilitar testes iniciais
+    this.tecnicos = [
+      { id: this.proximoIdTecnico++, nome: 'Carlos Silva', especialidade: 'Rede', contato: '(11) 99999-0001', situacao: 'Ativo' },
+      { id: this.proximoIdTecnico++, nome: 'Ana Souza', especialidade: 'Hardware', contato: '(11) 99999-0002', situacao: 'Ativo' },
+      { id: this.proximoIdTecnico++, nome: 'Pedro Lima', especialidade: 'Software', contato: '(11) 99999-0003', situacao: 'Inativo' }
+    ];
+
+    this.chamados = [
+      {
+        id: this.proximoIdChamado++,
+        titulo: 'Computador não liga',
+        descricao: 'Máquina do setor financeiro não liga após queda de energia.',
+        solicitante: 'João Pereira',
+        setor: 'Financeiro',
+        tecnico: 'Ana Souza',
+        prioridade: 'Alta',
+        status: 'Aberto',
+        observacao: '',
+        dataAbertura: new Date().toLocaleDateString('pt-BR'),
+        dataCriacao: new Date().toLocaleDateString('pt-BR')
+      },
+      {
+        id: this.proximoIdChamado++,
+        titulo: 'Sem acesso à internet',
+        descricao: 'Rede Wi-Fi do 3º andar está fora do ar.',
+        solicitante: 'Maria Santos',
+        setor: 'TI',
+        tecnico: 'Carlos Silva',
+        prioridade: 'Média',
+        status: 'Em atendimento',
+        observacao: 'Técnico já foi ao local.',
+        dataAbertura: new Date().toLocaleDateString('pt-BR'),
+        dataCriacao: new Date().toLocaleDateString('pt-BR')
+      }
+    ];
   }
 
-  listarTodos(): Chamado[] {
+  // ========================
+  // MÉTODOS DE CHAMADOS
+  // ========================
+
+  /**
+   * Adiciona um novo chamado ao array.
+   * Gera um ID único automaticamente e registra a data de criação.
+   */
+  adicionarChamado(chamado: any): void {
+    chamado.id = this.proximoIdChamado++;
+    chamado.dataCriacao = new Date().toLocaleDateString('pt-BR');
+    // Define status padrão se não informado
+    if (!chamado.status) {
+      chamado.status = 'Aberto';
+    }
+    this.chamados.push(chamado);
+  }
+
+  /**
+   * Retorna a lista completa de chamados.
+   */
+  listarChamados(): any[] {
     return this.chamados;
   }
 
-  buscarPorId(id: number): Chamado | undefined {
+  /**
+   * Busca um chamado pelo ID.
+   * Retorna o chamado encontrado ou undefined.
+   */
+  buscarChamadoPorId(id: number): any {
     return this.chamados.find(c => c.id === id);
   }
 
-  adicionar(chamado: Omit<Chamado, 'id'>): void {
-    this.chamados.push({
-      ...chamado,
-      id: this.proximoId++
-    });
-  }
-
-  atualizar(chamadoAtualizado: Chamado): void {
-    const index = this.chamados.findIndex(c => c.id === chamadoAtualizado.id);
-    if (index !== -1) {
-      this.chamados[index] = { ...chamadoAtualizado };
-    }
-  }
-
-  excluir(id: number): void {
+  /**
+   * Exclui um chamado pelo ID.
+   */
+  excluirChamado(id: number): void {
     this.chamados = this.chamados.filter(c => c.id !== id);
   }
 
-  filtrarPorStatus(status: string): Chamado[] {
-    if (status === 'todos') return [...this.chamados];
-    return this.chamados.filter(c => c.status === status);
-  }
-
-  atualizarStatus(id: number, status: any, observacao: string): void {
-    const chamado = this.buscarPorId(id);
+  /**
+   * Atualiza o status e a observação de um chamado pelo ID.
+   */
+  atualizarStatus(id: number, status: string, observacao: string): void {
+    const chamado = this.chamados.find(c => c.id === id);
     if (chamado) {
       chamado.status = status;
       chamado.observacao = observacao;
     }
   }
 
-  obterEstatisticas() {
-    return {
-      total: this.chamados.length,
-      abertos: this.chamados.filter(c => c.status === 'Aberto').length,
-      emAtendimento: this.chamados.filter(c => c.status === 'Em atendimento').length,
-      concluidos: this.chamados.filter(c => c.status === 'Concluído').length,
-      cancelados: this.chamados.filter(c => c.status === 'Cancelado').length,
-      baixa: this.chamados.filter(c => c.prioridade === 'Baixa').length,
-      media: this.chamados.filter(c => c.prioridade === 'Média').length,
-      alta: this.chamados.filter(c => c.prioridade === 'Alta').length,
-      urgente: this.chamados.filter(c => c.prioridade === 'Urgente').length
-    };
+  // ========================
+  // MÉTODOS DE TÉCNICOS
+  // ========================
+
+  /**
+   * Adiciona um novo técnico ao array.
+   * Gera um ID único automaticamente.
+   */
+  adicionarTecnico(tecnico: any): void {
+    tecnico.id = this.proximoIdTecnico++;
+    this.tecnicos.push(tecnico);
   }
 
-  private carregarExemplos(): void {
-    this.chamados = [
-      { id: 1, solicitante: 'Maria Silva', setor: 'Recepção', titulo: 'Computador não liga', descricao: 'O computador não está ligando.', prioridade: 'Alta', dataAbertura: '2026-04-28', tecnicoResponsavel: 'Carlos Ferreira', status: 'Aberto', observacao: '' },
-      { id: 2, solicitante: 'João Santos', setor: 'Financeiro', titulo: 'Impressora com erro de papel', descricao: 'Impressora travada com papel.', prioridade: 'Média', dataAbertura: '2026-04-27', tecnicoResponsavel: 'Ana Oliveira', status: 'Em atendimento', observacao: 'Verificando roletes.' }
-    ];
-    this.proximoId = 3;
+  /**
+   * Retorna a lista completa de técnicos.
+   */
+  listarTecnicos(): any[] {
+    return this.tecnicos;
+  }
+
+  /**
+   * Exclui um técnico pelo ID.
+   */
+  excluirTecnico(id: number): void {
+    this.tecnicos = this.tecnicos.filter(t => t.id !== id);
   }
 }

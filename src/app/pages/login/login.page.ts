@@ -1,84 +1,86 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService, UserRole } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import {
-  IonContent, IonInput,
-  IonButton, IonIcon, IonText, IonSpinner
+  IonContent,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonItem,
+  IonInput,
+  IonSelect,
+  IonSelectOption,
+  IonButton,
+  IonIcon,
+  IonText
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { lockClosedOutline, personOutline, logInOutline, constructOutline } from 'ionicons/icons';
-import { AuthService } from '../../services/auth.service';
+import { logInOutline, personOutline, lockClosedOutline, buildOutline, alertCircleOutline } from 'ionicons/icons';
 
 /**
- * Página de Login do sistema de chamados técnicos.
- * Utiliza ngModel para capturar os dados do formulário.
+ * LoginPage - Tela de autenticação do aplicativo.
+ * Valida se os campos usuário e senha estão preenchidos antes de navegar ao menu.
+ * Utiliza ngModel para binding dos campos do formulário.
  */
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   imports: [
-    FormsModule, IonContent,
-    IonInput, IonButton, IonIcon, IonText, IonSpinner
+    CommonModule,
+    FormsModule,
+    IonContent,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    IonItem,
+    IonInput,
+    IonSelect,
+    IonSelectOption,
+    IonButton,
+    IonIcon,
+    IonText
   ]
 })
 export class LoginPage {
 
-  // Campos do formulário vinculados com ngModel
+  // Campos do formulário de login (usados com ngModel)
   usuario: string = '';
   senha: string = '';
 
-  // Controla mensagem de erro
-  erroLogin: boolean = false;
+  // Mensagem de erro exibida quando a validação falha
   mensagemErro: string = '';
 
-  // Controla estado de carregamento
-  carregando: boolean = false;
+  // Tipo de perfil do usuário (simulado)
+  tipoUsuario: UserRole = 'comum';
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {
-    // Registra os ícones utilizados na página
-    addIcons({ lockClosedOutline, personOutline, logInOutline, constructOutline });
+  constructor(private router: Router, private authService: AuthService) {
+    // Registra os ícones do Ionicons utilizados no template
+    addIcons({ logInOutline, personOutline, lockClosedOutline, buildOutline, alertCircleOutline });
   }
 
   /**
-   * Realiza a validação e tentativa de login.
-   * Valida campos obrigatórios e credenciais.
+   * Valida os campos do formulário e navega para o menu se estiverem preenchidos.
+   * Caso contrário, exibe uma mensagem de erro.
    */
-  fazerLogin(): void {
-    // Validação simples dos campos
-    if (!this.usuario.trim()) {
-      this.erroLogin = true;
-      this.mensagemErro = 'Informe o nome de usuário.';
+  entrar(): void {
+    // Limpa a mensagem de erro anterior
+    this.mensagemErro = '';
+
+    // Validação: ambos os campos devem estar preenchidos
+    if (!this.usuario.trim() || !this.senha.trim() || !this.tipoUsuario) {
+      this.mensagemErro = 'Preencha todos os campos para continuar.';
       return;
     }
 
-    if (!this.senha.trim()) {
-      this.erroLogin = true;
-      this.mensagemErro = 'Informe a senha.';
-      return;
-    }
+    // Realiza o login armazenando o perfil no AuthService
+    this.authService.login(this.usuario.trim(), this.tipoUsuario);
 
-    // Simula carregamento
-    this.carregando = true;
-    this.erroLogin = false;
-
-    // Aguarda meio segundo para simular autenticação
-    setTimeout(() => {
-      const sucesso = this.authService.login(this.usuario, this.senha);
-
-      if (sucesso) {
-        // Login bem-sucedido, navega para o menu principal
-        this.router.navigate(['/menu']);
-      } else {
-        // Credenciais inválidas
-        this.erroLogin = true;
-        this.mensagemErro = 'Usuário ou senha incorretos.';
-      }
-
-      this.carregando = false;
-    }, 600);
+    // Campos válidos → navega para o menu principal
+    this.router.navigate(['/menu']);
   }
 }
